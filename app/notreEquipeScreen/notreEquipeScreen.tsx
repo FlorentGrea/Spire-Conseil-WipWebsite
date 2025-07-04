@@ -20,6 +20,7 @@ export default function NotreEquipeScreen() {
   const [activeHexagon, setActiveHexagon] = useState(0)
   const [isScrollLocked, setIsScrollLocked] = useState(false)
   const [isLayoutSwapped, setIsLayoutSwapped] = useState(false)
+  const [shouldAnimate, setShouldAnimate] = useState(false)
   const screenRef = useRef<HTMLDivElement>(null)
   const lastScrollTime = useRef(0)
   const scrollCooldown = 500 // milliseconds
@@ -282,112 +283,122 @@ export default function NotreEquipeScreen() {
           Notre Équipe
         </h1>
         
-        <div className={`flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 w-full max-w-6xl items-center justify-center transition-all duration-700 ease-in-out ${isLayoutSwapped ? 'lg:flex-row-reverse' : ''}`}>
-          {/* Text Section */}
-          <motion.div 
-            className="flex-1 min-w-[220px] max-w-xl w-full flex flex-col items-center justify-center text-center px-2 sm:px-4"
-            initial={{ opacity: 1, x: 0 }}
-            animate={{ 
-              opacity: (isLayoutSwapped && activeHexagon !== 1) ? 0 : 1,
-              x: isLayoutSwapped ? -100 : 0
+        {textContent.map((content, index) => (
+          <div 
+            key={index}
+            className={`flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 w-full max-w-6xl items-center justify-center transition-all duration-300 ease-in-out ${isLayoutSwapped ? 'lg:flex-row-reverse' : ''}`}
+            style={{
+              position: activeHexagon === index ? "relative" : "absolute",
+              visibility: activeHexagon === index ? "visible" : "hidden"
             }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
           >
-            <div className="relative overflow-hidden w-full min-h-[160px] sm:min-h-[200px] flex items-center justify-center">
-              <div className="w-full flex flex-col items-center justify-center">
-                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-3 sm:mb-4">
-                  {textContent[isLayoutSwapped ? 1 : activeHexagon].title}
-                </h2>
-                <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-                  {textContent[isLayoutSwapped ? 1 : activeHexagon].description}
-                </p>
+            {/* Text Section */}
+            <div 
+              className="flex-1 min-w-[220px] max-w-xl w-full flex flex-col items-center justify-center text-center px-2 sm:px-4"
+              style={{
+                opacity: activeHexagon === index ? 1 : 0,
+                transform: activeHexagon === index ? "translateX(0)" : (index % 2 === 0 ? "translateX(-50px)" : "translateX(50px)"),
+                transition: "opacity 0.3s ease-in-out, transform 0.3s ease-in-out"
+              }}
+            >
+              <div className="relative overflow-hidden w-full min-h-[160px] sm:min-h-[200px] flex items-center justify-center">
+                <div className="w-full flex flex-col items-center justify-center">
+                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-3 sm:mb-4">
+                    {content.title}
+                  </h2>
+                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+                    {content.description}
+                  </p>
+                </div>
               </div>
             </div>
-          </motion.div>
-          
-          {/* Alveoles Section */}
-          <motion.div 
-            className="flex-1 flex flex-row md:grid grid-cols-2 grid-rows-2 overflow-visible"
-            initial={{ x: 0 }}
-            animate={{ x: isLayoutSwapped ? -100 : 0 }}
-            transition={{ duration: 0.7, ease: "easeInOut" }}
-          >              
-            <div className="flex justify-end items-end col-start-1 row-start-1 md:-mr-14 md:-mb-4">
-              <svg
-                width={svgSize}
-                height={svgSize}
-                viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
-                className="drop-shadow-lg"
-                style={{
-                  filter: activeHexagon === 0 
-                    ? 'drop-shadow(0 8px 18px rgba(241,196,15,0.9))' 
-                    : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
-                }}
-                onClick={() => handleHexagonClick(0)}
-              >
-                <defs>
-                  <clipPath id="hex1">
-                    <path d={createHexagonPath(hexSize)} transform="rotate(-90 0 0)" />
-                  </clipPath>
-                </defs>
-                <path
-                  d={createHexagonPath(hexSize)}
-                  fill="#F1C40F"
-                  stroke="#fff"
-                  strokeWidth="3"
-                  className="transition-all duration-200 hover:drop-shadow-xl"
-                  transform="rotate(-90 0 0)"
-                />
-                <image
-                  href="/leD.webp"
-                  x={-hexSize}
-                  y={-hexSize}
-                  width={hexSize * 2}
-                  height={hexSize * 2}
-                  clipPath="url(#hex1)"
-                  preserveAspectRatio="xMidYMid slice"
-                />
-              </svg>
+            
+            {/* Alveoles Section */}
+            <div 
+              className="flex-1 flex flex-row lg:grid grid-cols-2 grid-rows-2 overflow-visible"
+              style={{
+                opacity: activeHexagon === index ? 1 : 0,
+                transform: activeHexagon === index ? "translateX(0)" : (index % 2 === 0 ? "translateX(-50px)" : "translateX(50px)"),
+                transition: "opacity 0.3s ease-in-out, transform 0.3s ease-in-out"
+              }}
+            >              
+              <div className="flex justify-end items-end col-start-1 row-start-1 lg:-mr-14 lg:-mb-4">
+                <svg
+                  width={svgSize}
+                  height={svgSize}
+                  viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
+                  className="drop-shadow-lg"
+                  style={{
+                    filter: activeHexagon === 0 
+                      ? 'drop-shadow(0 8px 18px rgba(241,196,15,0.9))' 
+                      : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
+                  }}
+                  onClick={() => handleHexagonClick(0)}
+                >
+                  <defs>
+                    <clipPath id={`hex1-${index}`}>
+                      <path d={createHexagonPath(hexSize)} transform="rotate(-90 0 0)" />
+                    </clipPath>
+                  </defs>
+                  <path
+                    d={createHexagonPath(hexSize)}
+                    fill="#F1C40F"
+                    stroke="#fff"
+                    strokeWidth="3"
+                    className="transition-all duration-200 hover:drop-shadow-xl"
+                    transform="rotate(-90 0 0)"
+                  />
+                  <image
+                    href="/leD.webp"
+                    x={-hexSize}
+                    y={-hexSize}
+                    width={hexSize * 2}
+                    height={hexSize * 2}
+                    clipPath={`url(#hex1-${index})`}
+                    preserveAspectRatio="xMidYMid slice"
+                  />
+                </svg>
+              </div>
+              <div className="flex justify-start items-start col-start-2 row-start-2 lg:-ml-14 lg:-mt-4">
+                <svg
+                  width={svgSize}
+                  height={svgSize}
+                  viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
+                  className="drop-shadow-lg"
+                  style={{
+                    filter: activeHexagon === 1 
+                      ? 'drop-shadow(0 8px 18px rgba(241,196,15,0.9))' 
+                      : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
+                  }}
+                  onClick={() => handleHexagonClick(1)}
+                >
+                  <defs>
+                    <clipPath id={`hex2-${index}`}>
+                      <path d={createHexagonPath(hexSize)} transform="rotate(-90 0 0)" />
+                    </clipPath>
+                  </defs>
+                  <path
+                    d={createHexagonPath(hexSize)}
+                    fill="#F1C40F"
+                    stroke="#fff"
+                    strokeWidth="3"
+                    className="transition-all duration-200 hover:drop-shadow-xl"
+                    transform="rotate(-90 0 0)"
+                  />
+                  <image
+                    href="/leM.jpg"
+                    x={-hexSize}
+                    y={-hexSize}
+                    width={hexSize * 2}
+                    height={hexSize * 2}
+                    clipPath={`url(#hex2-${index})`}
+                    preserveAspectRatio="xMidYMid slice"
+                  />
+                </svg>
+              </div>
             </div>
-            <div className="flex justify-start items-start col-start-2 row-start-2 md:-ml-14 md:-mt-4">
-              <svg
-                width={svgSize}
-                height={svgSize}
-                viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
-                className="drop-shadow-lg"
-                style={{
-                  filter: activeHexagon === 1 
-                    ? 'drop-shadow(0 8px 18px rgba(241,196,15,0.9))' 
-                    : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
-                }}
-                onClick={() => handleHexagonClick(1)}
-              >
-                <defs>
-                  <clipPath id="hex2">
-                    <path d={createHexagonPath(hexSize)} transform="rotate(-90 0 0)" />
-                  </clipPath>
-                </defs>
-                <path
-                  d={createHexagonPath(hexSize)}
-                  fill="#F1C40F"
-                  stroke="#fff"
-                  strokeWidth="3"
-                  className="transition-all duration-200 hover:drop-shadow-xl"
-                  transform="rotate(-90 0 0)"
-                />
-                <image
-                  href="/leM.jpg"
-                  x={-hexSize}
-                  y={-hexSize}
-                  width={hexSize * 2}
-                  height={hexSize * 2}
-                  clipPath="url(#hex2)"
-                  preserveAspectRatio="xMidYMid slice"
-                />
-              </svg>
             </div>
-          </motion.div>
-        </div>
+          ))}
       </div>
     </div>
   )
