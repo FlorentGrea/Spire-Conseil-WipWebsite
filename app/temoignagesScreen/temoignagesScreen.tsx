@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useMousePosition } from "../../utils/mouseCoordinates"
 import {
   Carousel,
   CarouselContent,
@@ -12,6 +13,8 @@ import {
 export default function TemoignagesScreen() {
   const [api, setApi] = useState<unknown>(null)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [hasMounted, setHasMounted] = useState(false)
+  const mousePosition = useMousePosition()
 
   // Auto-advance carousel every 5 seconds
   useEffect(() => {
@@ -19,6 +22,11 @@ export default function TemoignagesScreen() {
       (api as { scrollNext: () => void }).scrollNext()
     }
   }, [api])
+
+  // Set mounted state
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   // Track current slide for animations
   useEffect(() => {
@@ -49,6 +57,28 @@ export default function TemoignagesScreen() {
     }
   ]
 
+  // Function to calculate dynamic shadow for video
+  const getDynamicShadow = () => {
+    if (!hasMounted || mousePosition.x === 0 && mousePosition.y === 0) return 'drop-shadow(0 8px 18px rgba(0,0,0,0.5))';
+    
+    // Calculate the normalized position of the mouse in the browser window
+    const xPercent = mousePosition.x / window.innerWidth - 0.5;
+    const yPercent = mousePosition.y / window.innerHeight - 0.5;
+    
+    const moveX = xPercent * 20;
+    const moveY = yPercent * 20;
+    
+    // Create a gradient-like effect by alternating colors
+    const intensity = Math.abs(xPercent) + Math.abs(yPercent);
+    const blueIntensity = Math.max(0, 1 - intensity);
+    const yellowIntensity = Math.min(1, intensity);
+    
+    // Blend the colors based on mouse position with more vibrant colors
+    const blendedColor = `rgba(${Math.round(0 * blueIntensity + 255 * yellowIntensity)}, ${Math.round(50 * blueIntensity + 255 * yellowIntensity)}, ${Math.round(150 * blueIntensity + 0 * yellowIntensity)}, 0.9)`;
+    
+    return `drop-shadow(${moveX}px ${moveY}px 8px ${blendedColor})`;
+  };
+
   return (
     <div className="flex flex-col items-center w-full min-h-screen snap-start pt-10 sm:pt-16 md:pt-24 lg:pt-32 pb-6 sm:pb-10 md:pb-16 lg:pb-20 box-border"  data-screen="temoignages">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex flex-col items-center">
@@ -59,7 +89,7 @@ export default function TemoignagesScreen() {
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full max-w-6xl items-center">
           {/* Video Section */}
           <div className="flex-1 flex items-center">
-            <div className="w-full aspect-video rounded-lg overflow-hidden" style={{ filter: 'drop-shadow(0 8px 18px rgba(0,0,0,0.5))' }}>
+            <div className="w-full aspect-video rounded-lg overflow-hidden" style={{ filter: getDynamicShadow() }}>
               <iframe
                 src="https://www.youtube.com/embed/ZAmK31x3qDs"
                 title="Témoignage Spire Conseil"

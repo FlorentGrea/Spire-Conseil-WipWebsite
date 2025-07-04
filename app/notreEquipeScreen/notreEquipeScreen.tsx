@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
+import { useMousePosition } from "../../utils/mouseCoordinates"
 
 
 
@@ -21,6 +22,9 @@ export default function NotreEquipeScreen() {
   const [isScrollLocked, setIsScrollLocked] = useState(false)
   const [isLayoutSwapped, setIsLayoutSwapped] = useState(false)
   const [shouldAnimate, setShouldAnimate] = useState(false)
+  const [isLargeScreen, setIsLargeScreen] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
+  const mousePosition = useMousePosition()
   const screenRef = useRef<HTMLDivElement>(null)
   const lastScrollTime = useRef(0)
   const scrollCooldown = 500 // milliseconds
@@ -260,9 +264,13 @@ export default function NotreEquipeScreen() {
     return `M ${points.join(" L ")} Z`
   }
 
-  // Responsive hexagon size
+  // Set mounted state and responsive hexagon size
   useEffect(() => {
-    const checkSize = () => setIsMd(window.innerWidth >= 768);
+    setHasMounted(true);
+    const checkSize = () => {
+      setIsMd(window.innerWidth >= 768);
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
     checkSize();
     window.addEventListener('resize', checkSize);
     return () => window.removeEventListener('resize', checkSize);
@@ -271,6 +279,30 @@ export default function NotreEquipeScreen() {
   // Responsive hexagon size for all hexagons
   const hexSize = isMd ? 100 : 70;
   const svgSize = isMd ? 220 : 180;
+
+  // Function to calculate dynamic shadow for active hexagon
+  const getDynamicShadow = (hexIndex: number) => {
+    if (activeHexagon !== hexIndex || !hasMounted || mousePosition.x === 0 && mousePosition.y === 0) return '';
+    
+    // Calculate the normalized position of the mouse in the browser window
+    const xPercent = mousePosition.x / window.innerWidth - 0.5;
+    const yPercent = mousePosition.y / window.innerHeight - 0.5;
+    
+    const moveX = xPercent * 20; // Reduced multiplier for closer shadow
+    const moveY = yPercent * 20; // Reduced multiplier for closer shadow
+    
+    // Create a gradient-like effect by alternating colors
+    const intensity = Math.abs(xPercent) + Math.abs(yPercent);
+    const blueIntensity = Math.max(0, 1 - intensity);
+    const yellowIntensity = Math.min(1, intensity);
+    
+    // Blend the colors based on mouse position with more vibrant colors
+    const blendedColor = `rgba(${Math.round(0 * blueIntensity + 255 * yellowIntensity)}, ${Math.round(50 * blueIntensity + 255 * yellowIntensity)}, ${Math.round(150 * blueIntensity + 0 * yellowIntensity)}, 0.9)`;
+    
+    return `${moveX}px ${moveY}px 8px ${blendedColor}`;
+  };
+
+
 
   return (
     <div 
@@ -315,39 +347,43 @@ export default function NotreEquipeScreen() {
             
             {/* Alveoles Section */}
             <div 
-              className="flex-1 flex flex-row lg:grid grid-cols-2 grid-rows-2 overflow-visible"
+              className="flex-1 flex flex-row gap-0 sm:gap-4 lg:grid grid-cols-2 grid-rows-2 overflow-visible"
               style={{
                 opacity: activeHexagon === index ? 1 : 0,
                 transform: activeHexagon === index ? "translateX(0)" : (index % 2 === 0 ? "translateX(-50px)" : "translateX(50px)"),
-                transition: "opacity 0.3s ease-in-out, transform 0.3s ease-in-out"
+                transition: isLargeScreen ? "opacity 0.3s ease-in-out, transform 0.3s ease-in-out" : "none"
               }}
             >              
-              <div className="flex justify-end items-end col-start-1 row-start-1 lg:-mr-14 lg:-mb-4">
-                <svg
-                  width={svgSize}
-                  height={svgSize}
-                  viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
-                  className="drop-shadow-lg"
-                  style={{
-                    filter: activeHexagon === 0 
-                      ? 'drop-shadow(0 8px 18px rgba(241,196,15,0.9))' 
-                      : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
-                  }}
-                  onClick={() => handleHexagonClick(0)}
-                >
+              <div className="flex justify-end items-end col-start-1 row-start-1 -mr-4 lg:-mr-14 lg:-mb-4" style={{ overflow: 'visible' }}>
+                              <svg
+                width={svgSize}
+                height={svgSize}
+                viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
+                className="drop-shadow-lg"
+                style={{
+                  filter: activeHexagon === 0 
+                    ? 'none' 
+                    : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
+                  overflow: 'visible'
+                }}
+                onClick={() => handleHexagonClick(0)}
+              >
                   <defs>
                     <clipPath id={`hex1-${index}`}>
                       <path d={createHexagonPath(hexSize)} transform="rotate(-90 0 0)" />
                     </clipPath>
                   </defs>
-                  <path
-                    d={createHexagonPath(hexSize)}
-                    fill="#F1C40F"
-                    stroke="#fff"
-                    strokeWidth="3"
-                    className="transition-all duration-200 hover:drop-shadow-xl"
-                    transform="rotate(-90 0 0)"
-                  />
+                                  <path
+                  d={createHexagonPath(hexSize)}
+                  fill="#F1C40F"
+                  stroke="#fff"
+                  strokeWidth="3"
+                  className="hover:drop-shadow-xl"
+                  transform="rotate(-90 0 0)"
+                  style={{
+                    filter: activeHexagon === 0 ? `drop-shadow(${getDynamicShadow(0)})` : ''
+                  }}
+                />
                   <image
                     href="/leD.webp"
                     x={-hexSize}
@@ -359,7 +395,7 @@ export default function NotreEquipeScreen() {
                   />
                 </svg>
               </div>
-              <div className="flex justify-start items-start col-start-2 row-start-2 lg:-ml-14 lg:-mt-4">
+              <div className="flex justify-start items-start col-start-2 row-start-2 -ml-4 lg:-ml-14 lg:-mt-4" style={{ overflow: 'visible' }}>
                 <svg
                   width={svgSize}
                   height={svgSize}
@@ -367,8 +403,9 @@ export default function NotreEquipeScreen() {
                   className="drop-shadow-lg"
                   style={{
                     filter: activeHexagon === 1 
-                      ? 'drop-shadow(0 8px 18px rgba(241,196,15,0.9))' 
-                      : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
+                      ? 'none' 
+                      : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
+                    overflow: 'visible'
                   }}
                   onClick={() => handleHexagonClick(1)}
                 >
@@ -377,14 +414,17 @@ export default function NotreEquipeScreen() {
                       <path d={createHexagonPath(hexSize)} transform="rotate(-90 0 0)" />
                     </clipPath>
                   </defs>
-                  <path
-                    d={createHexagonPath(hexSize)}
-                    fill="#F1C40F"
-                    stroke="#fff"
-                    strokeWidth="3"
-                    className="transition-all duration-200 hover:drop-shadow-xl"
-                    transform="rotate(-90 0 0)"
-                  />
+                                  <path
+                  d={createHexagonPath(hexSize)}
+                  fill="#F1C40F"
+                  stroke="#fff"
+                  strokeWidth="3"
+                  className="hover:drop-shadow-xl"
+                  transform="rotate(-90 0 0)"
+                  style={{
+                    filter: activeHexagon === 1 ? `drop-shadow(${getDynamicShadow(1)})` : ''
+                  }}
+                />
                   <image
                     href="/leM.jpg"
                     x={-hexSize}
