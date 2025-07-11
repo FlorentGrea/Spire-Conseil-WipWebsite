@@ -7,7 +7,7 @@ import HeadLine from "@/components/headLine";
 
 export default function Home() {
   return (
-    <div className="h-screen overflow-y-scroll snap-y snap-mandatory">
+    <div className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory relative">
       <HeadLine />
       <TimelineScreen />
       <SubsidiariteScreen />

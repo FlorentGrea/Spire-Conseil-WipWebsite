@@ -118,7 +118,7 @@ export default function HeadLine() {
 
   return (
     <header className="w-full bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+              <div className="max-w-6xl xl:max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
         <div className="flex justify-between items-center h-fit py-1 sm:py-1.5">
           {/* Logo Section */}
           <div className="flex-shrink-0">

@@ -111,7 +111,7 @@ export default function Alveoles() {
   const svgSize = 500
 
   return (
-    <div className="flex flex-col items-center gap-8 p-8 bg-gray-50 min-h-screen">
+    <div className="flex flex-col items-center gap-8 p-8 bg-gray-50 h-screen">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Alveoles Interactives</h1>
         <p className="text-gray-600">Cliquez sur chaque hexagone pour découvrir son contenu</p>

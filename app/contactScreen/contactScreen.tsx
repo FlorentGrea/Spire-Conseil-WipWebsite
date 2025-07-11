@@ -43,7 +43,7 @@ export default function ContactScreen() {
   };
 
   return (
-    <div className="flex flex-col items-center w-full min-h-screen snap-start pt-10 sm:pt-16 md:pt-24 lg:pt-32 pb-6 sm:pb-10 md:pb-16 lg:pb-20 box-border"  data-screen="contact">
+    <div className="flex flex-col items-center w-full h-screen snap-start pt-10 sm:pt-16 md:pt-24 lg:pt-32 pb-6 sm:pb-10 md:pb-16 lg:pb-20 box-border"  data-screen="contact">
       <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 sm:mb-8 mt-8 sm:mt-12 md:mt-16 text-center">Nous contacter</h1>
       <div className="w-full max-w-lg flex flex-col items-center">
         {/* Top: Phone Info */}

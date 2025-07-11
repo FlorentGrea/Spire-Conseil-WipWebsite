@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useMousePosition } from "../../utils/mouseCoordinates"
+import { useMousePosition } from "../utils/mouseCoordinates"
 import {
   Carousel,
   CarouselContent,

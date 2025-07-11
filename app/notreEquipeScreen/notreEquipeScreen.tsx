@@ -202,9 +202,14 @@ export default function NotreEquipeScreen() {
               // Entering from below (scrolling up)
               setActiveHexagon(textContent.length - 1)
               activeHexagonRef.current = textContent.length - 1
+              setIsLayoutSwapped(true)
             }
           } else {
             setIsScrollLocked(false)
+            // Reset to first hexagon when leaving the screen
+            setActiveHexagon(0)
+            activeHexagonRef.current = 0
+            setIsLayoutSwapped(false)
           }
         })
       },
@@ -307,30 +312,36 @@ export default function NotreEquipeScreen() {
   return (
     <div 
       ref={screenRef}
-      className="flex flex-col items-center w-full min-h-screen snap-start pt-10 sm:pt-16 md:pt-24 lg:pt-32 pb-6 sm:pb-10 md:pb-16 lg:pb-20 box-border" 
+      className="flex flex-col items-center w-full h-screen snap-start pt-10 sm:pt-16 md:pt-24 lg:pt-32 pb-6 sm:pb-10 md:pb-16 lg:pb-20 box-border" 
       data-screen="notre-equipe"
     >
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 w-full flex flex-col items-center">
+      <div className="max-w-6xl xl:max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 w-full flex flex-col items-center">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 sm:mb-8 mt-8 sm:mt-12 md:mt-16 text-center">
           Notre Équipe
         </h1>
         
+        <div className="relative w-full max-w-6xl" style={{ minHeight: "400px" }}>
         {textContent.map((content, index) => (
           <div 
             key={index}
             className={`flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 w-full max-w-6xl items-center justify-center transition-all duration-300 ease-in-out ${isLayoutSwapped ? 'lg:flex-row-reverse' : ''}`}
             style={{
               position: activeHexagon === index ? "relative" : "absolute",
-              visibility: activeHexagon === index ? "visible" : "hidden"
+              top: activeHexagon === index ? "auto" : "0",
+              left: activeHexagon === index ? "auto" : "0",
+              right: activeHexagon === index ? "auto" : "0",
+              visibility: activeHexagon === index ? "visible" : "hidden",
+              zIndex: activeHexagon === index ? "auto" : "1",
+              opacity: activeHexagon === index ? 1 : 0,
+              transition: "opacity 0.3s ease-in-out, transform 0.3s ease-in-out"
             }}
           >
             {/* Text Section */}
             <div 
               className="flex-1 min-w-[220px] max-w-xl w-full flex flex-col items-center justify-center text-center px-2 sm:px-4"
               style={{
-                opacity: activeHexagon === index ? 1 : 0,
                 transform: activeHexagon === index ? "translateX(0)" : (index % 2 === 0 ? "translateX(-50px)" : "translateX(50px)"),
-                transition: "opacity 0.3s ease-in-out, transform 0.3s ease-in-out"
+                transition: "transform 0.3s ease-in-out"
               }}
             >
               <div className="relative overflow-hidden w-full min-h-[160px] sm:min-h-[200px] flex items-center justify-center">
@@ -349,9 +360,8 @@ export default function NotreEquipeScreen() {
             <div 
               className="flex-1 flex flex-row gap-0 sm:gap-4 lg:grid grid-cols-2 grid-rows-2 overflow-visible"
               style={{
-                opacity: activeHexagon === index ? 1 : 0,
                 transform: activeHexagon === index ? "translateX(0)" : (index % 2 === 0 ? "translateX(-50px)" : "translateX(50px)"),
-                transition: isLargeScreen ? "opacity 0.3s ease-in-out, transform 0.3s ease-in-out" : "none"
+                transition: isLargeScreen ? "transform 0.3s ease-in-out" : "none"
               }}
             >              
               <div className="flex justify-end items-end col-start-1 row-start-1 -mr-4 lg:-mr-14 lg:-mb-4" style={{ overflow: 'visible' }}>
@@ -439,6 +449,7 @@ export default function NotreEquipeScreen() {
             </div>
             </div>
           ))}
+        </div>
       </div>
     </div>
   )
