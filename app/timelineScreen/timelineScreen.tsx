@@ -97,137 +97,42 @@ export default function TimelineScreen() {
           preserveAspectRatio="none"
           style={{ zIndex: 0 }}
         >
-          <defs>
-            <filter id="hex-shadow" x="-50%" y="-50%" width="200%" height="200%">
-              <feDropShadow dx="0" dy="8" stdDeviation="9" floodColor="black" floodOpacity="0.5" />
-            </filter>
-            
-            {/* Gradient definitions for the line */}
-            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
-              <stop offset="25%" stopColor="#1e40af" stopOpacity="0.9" />
-              <stop offset="50%" stopColor="#012073" stopOpacity="1" />
-              <stop offset="75%" stopColor="#1e40af" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#012073" stopOpacity="1" />
-            </linearGradient>
-            
-            <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#f7e400" stopOpacity="0.3" />
-              <stop offset="50%" stopColor="#fbbf24" stopOpacity="0.6" />
-              <stop offset="100%" stopColor="#f7e400" stopOpacity="0.3" />
-            </linearGradient>
-            
-            {/* Glow filter */}
-            <filter id="lineGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-              <feMerge> 
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-            
-            {/* Animated dash pattern */}
-            <pattern id="dashPattern" patternUnits="userSpaceOnUse" width="20" height="6">
-              <line x1="0" y1="3" x2="20" y2="3" stroke="#f7e400" strokeWidth="2" opacity="0.6"/>
-            </pattern>
-          </defs>
-          
-          {/* Background glow line */}
+          {/* Simple connecting line */}
           {isMd ? (
             <polyline
               points="125,250 375,750 625,250 875,750"
               fill="none"
-              stroke="url(#glowGradient)"
-              strokeWidth="12"
+              stroke="#012073"
+              strokeWidth="30"
               strokeLinecap="round"
-              opacity="0.4"
-              filter="url(#lineGlow)"
             />
           ) : (
             <polyline
               points="250,120 750,370 250,620 750,870"
               fill="none"
-              stroke="url(#glowGradient)"
-              strokeWidth="12"
+              stroke="#012073"
+              strokeWidth="30"
               strokeLinecap="round"
-              opacity="0.4"
-              filter="url(#lineGlow)"
             />
-          )}
-          
-          {/* Main gradient line */}
-          {isMd ? (
-            <polyline
-              points="125,250 375,750 625,250 875,750"
-              fill="none"
-              stroke="url(#lineGradient)"
-              strokeWidth="8"
-              strokeLinecap="round"
-              strokeDasharray="0"
-              filter="url(#hex-shadow)"
-            />
-          ) : (
-            <polyline
-              points="250,120 750,370 250,620 750,870"
-              fill="none"
-              stroke="url(#lineGradient)"
-              strokeWidth="8"
-              strokeLinecap="round"
-              strokeDasharray="0"
-              filter="url(#hex-shadow)"
-            />
-          )}
-          
-          {/* Animated dots along the path */}
-          {isMd ? (
-            <>
-              <circle cx="125" cy="250" r="4" fill="#f7e400" opacity="0.8">
-                <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="375" cy="750" r="4" fill="#f7e400" opacity="0.8">
-                <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" begin="0.5s"/>
-              </circle>
-              <circle cx="625" cy="250" r="4" fill="#f7e400" opacity="0.8">
-                <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" begin="1s"/>
-              </circle>
-              <circle cx="875" cy="750" r="4" fill="#f7e400" opacity="0.8">
-                <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" begin="1.5s"/>
-              </circle>
-            </>
-          ) : (
-            <>
-              <circle cx="250" cy="120" r="4" fill="#f7e400" opacity="0.8">
-                <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="750" cy="370" r="4" fill="#f7e400" opacity="0.8">
-                <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" begin="0.5s"/>
-              </circle>
-              <circle cx="250" cy="620" r="4" fill="#f7e400" opacity="0.8">
-                <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" begin="1s"/>
-              </circle>
-              <circle cx="750" cy="870" r="4" fill="#f7e400" opacity="0.8">
-                <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" begin="1.5s"/>
-              </circle>
-            </>
           )}
         </svg>
         {/* Hexagons and titles */}
-        <div className="flex items-center justify-center col-start-1 row-start-1 w-24 md:w-auto">
+        <div className="flex items-center justify-center col-start-1 row-start-1 w-24 w-auto">
           <Hexagon image={hexData[0].image} onClick={() => setSelectedHex(0)} />
         </div>
-        <div className="flex items-center md:items-start justify-start md:justify-center col-start-2 md:col-start-1 row-start-1 md:row-start-2 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-left md:text-center">{hexData[0].title}</h2></div>
-        <div className="flex items-center justify-center col-start-2 md:col-start-2 row-start-2 md:row-start-2 w-24 md:w-auto">
+        <div className="flex items-center md:items-start justify-start md:justify-center col-start-2 md:col-start-1 row-start-1 md:row-start-2 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[0].title}</h2></div>
+        <div className="flex items-center justify-center col-start-2 md:col-start-2 row-start-2 md:row-start-2 w-24 w-auto">
           <Hexagon image={hexData[1].image} onClick={() => setSelectedHex(1)} />
         </div>
-        <div className="flex items-center md:items-end justify-end md:justify-center col-start-1 md:col-start-2 row-start-2 md:row-start-1 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-right md:text-center">{hexData[1].title}</h2></div>
-        <div className="flex items-center justify-center col-start-1 md:col-start-3 row-start-3 md:row-start-1 w-24 md:w-auto">
+        <div className="flex items-center md:items-end justify-end md:justify-center col-start-1 md:col-start-2 row-start-2 md:row-start-1 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[1].title}</h2></div>
+        <div className="flex items-center justify-center col-start-1 md:col-start-3 row-start-3 md:row-start-1 w-24 w-auto">
           <Hexagon image={hexData[2].image} onClick={() => setSelectedHex(2)} />
         </div>
-        <div className="flex items-center md:items-start justify-start md:justify-center col-start-2 md:col-start-3 row-start-3 md:row-start-2 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-left md:text-center">{hexData[2].title}</h2></div>
-        <div className="flex items-center justify-center col-start-2 md:col-start-4 row-start-4 md:row-start-2 w-24 md:w-auto">
+        <div className="flex items-center md:items-start justify-start md:justify-center col-start-2 md:col-start-3 row-start-3 md:row-start-2 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[2].title}</h2></div>
+        <div className="flex items-center justify-center col-start-2 md:col-start-4 row-start-4 md:row-start-2 w-24 w-auto">
           <Hexagon image={hexData[3].image} onClick={() => setSelectedHex(3)} />
         </div>
-        <div className="flex items-center md:items-end justify-end md:justify-center col-start-1 md:col-start-4 row-start-4 md:row-start-1 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-right md:text-center">{hexData[3].title}</h2></div>
+        <div className="flex items-center md:items-end justify-end md:justify-center col-start-1 md:col-start-4 row-start-4 md:row-start-1 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[3].title}</h2></div>
       </div>
       {/* Modal Popup */}
       {selectedHex !== null && (

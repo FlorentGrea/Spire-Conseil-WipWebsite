@@ -76,6 +76,24 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --shadow-color: 0deg 0% 69%;
+  --shadow-elevation-low:
+    0.5px 0.6px 0.9px hsl(var(--shadow-color) / 0.28),
+    0.8px 0.9px 1.4px -1.2px hsl(var(--shadow-color) / 0.28),
+    1.9px 2px 3.1px -2.5px hsl(var(--shadow-color) / 0.28);
+  --shadow-elevation-medium:
+    0.5px 0.6px 0.9px hsl(var(--shadow-color) / 0.29),
+    1.6px 1.7px 2.6px -0.8px hsl(var(--shadow-color) / 0.29),
+    4px 4.2px 6.5px -1.7px hsl(var(--shadow-color) / 0.29),
+    9.6px 10.2px 15.8px -2.5px hsl(var(--shadow-color) / 0.29);
+  --shadow-elevation-high:
+    0.5px 0.6px 0.9px hsl(var(--shadow-color) / 0.31),
+    2.9px 3.1px 4.8px -0.4px hsl(var(--shadow-color) / 0.31),
+    5.7px 6px 9.3px -0.8px hsl(var(--shadow-color) / 0.31),
+    9.8px 10.5px 16.2px -1.2px hsl(var(--shadow-color) / 0.31),
+    16.7px 17.7px 27.4px -1.7px hsl(var(--shadow-color) / 0.31),
+    27.4px 29.1px 45px -2.1px hsl(var(--shadow-color) / 0.31),
+    43.1px 45.8px 70.8px -2.5px hsl(var(--shadow-color) / 0.31);
 }
 
 .dark {
@@ -196,20 +214,20 @@ html, body {
   animation: spin-slow 8s linear infinite;
 }
 
-/* Fade in up animation for hexagons */
-@keyframes fade-in-up {
+/* Slide in animation for hexagons */
+@keyframes zoom-in {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: scale(0.3);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
   }
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
+  animation: zoom-in 0.5s ease-out forwards;
 }
 
 /* Drawing circle animation */
@@ -229,5 +247,36 @@ html, body {
 .animate-dot-move {
   animation: dot-move 3s ease-in-out forwards;
   transform-origin: 50px 50px;
+}
+
+/* Text slide animations */
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.4s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s ease-out forwards;
 }
 
