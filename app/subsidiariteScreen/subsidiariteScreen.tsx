@@ -48,7 +48,7 @@ function Hexagon({ image, onClick, noEffects, isSelected }: { image: string, onC
         fill={fillColor} 
         stroke={fillColor} 
         strokeWidth="4"
-        filter={noEffects ? 'none' : hover ? 'drop-shadow(0 8px 18px #f7e400cc)' : 'none'}
+        filter={noEffects ? 'none' : hover ? 'drop-shadow(0 2px 4px #f7e400dd)' : 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'}
       />
       <image
         href={`/${image}`}
@@ -68,12 +68,15 @@ export default function SubsidiariteScreen() {
   const [isVisible, setIsVisible] = useState(false);
   const [textAnimation, setTextAnimation] = useState<string>('');
   const [gradientRotation, setGradientRotation] = useState<number>(-50);
+  const [drawingComplete, setDrawingComplete] = useState(false);
   
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          // Set drawing complete after animation duration (3s)
+          setTimeout(() => setDrawingComplete(true), 3000);
         }
       },
       { threshold: 0.3 }
@@ -172,7 +175,7 @@ export default function SubsidiariteScreen() {
         <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 w-full max-w-6xl items-center justify-center">
           {/* Content Section */}
           <div className="flex-1 min-w-[220px] max-w-xl w-full flex flex-col items-center justify-center text-center px-2 sm:px-4">
-            <h2 key={`title-${activeHex || 'default'}`} className={`text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl font-semibold text-gray-800 mb-3 sm:mb-4 transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
+            <h2 key={`title-${activeHex || 'default'}`} className={`text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl font-bold text-[#012073] mb-3 sm:mb-4 transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
               {currentContent.title}
             </h2>
             {activeHex ? (
@@ -204,7 +207,7 @@ export default function SubsidiariteScreen() {
                   fill="none"
                   stroke="url(#arrowGradient)"
                   strokeWidth="6"
-                  strokeLinecap="round"
+                  strokeLinecap={drawingComplete ? "square" : "round"}
                   strokeDasharray="280"
                   strokeDashoffset="280"
                   className={`${isVisible ? 'animate-draw-circle' : ''}`}
@@ -267,7 +270,7 @@ export default function SubsidiariteScreen() {
                 </div>
                 
                 {/* Top-right hexagon */}
-                <div className={`absolute top-1/2 -right-5 sm:-right-4 lg:-right-8 transform -translate-y-1/2 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.35s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('autonomie')}>
+                <div className={`absolute top-1/2 -right-5 sm:-right-4 lg:-right-8 transform -translate-y-1/2 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.3s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('autonomie')}>
                   <Hexagon image="autonomy.jpg" isSelected={activeHex === 'autonomie'} />
                   <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
                     <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'autonomie' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Autonomie</span>
@@ -275,7 +278,7 @@ export default function SubsidiariteScreen() {
                 </div>
                 
                 {/* Bottom-right hexagon */}
-                <div className={`absolute -bottom-2 sm:bottom-0 right-1/8 sm:right-1/7 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.7s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('responsabilite')}>
+                <div className={`absolute -bottom-2 sm:bottom-0 right-1/8 sm:right-1/7 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.6s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('responsabilite')}>
                   <Hexagon image="responsibility.jpg" isSelected={activeHex === 'responsabilite'} />
                   <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
                     <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'responsabilite' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Responsabilité</span>
@@ -283,7 +286,7 @@ export default function SubsidiariteScreen() {
                 </div>
                 
                 {/* Bottom hexagon */}
-                <div className={`absolute -bottom-2 sm:bottom-0 left-1/8 sm:left-1/7 transform cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.05s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('confiance')}>
+                <div className={`absolute -bottom-2 sm:bottom-0 left-1/8 sm:left-1/7 transform cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.9s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('confiance')}>
                   <Hexagon image="trust.jpg" isSelected={activeHex === 'confiance'} />
                   <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
                     <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'confiance' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Confiance</span>
@@ -291,7 +294,7 @@ export default function SubsidiariteScreen() {
                 </div>
                 
                 {/* Bottom-left hexagon */}
-                <div className={`absolute top-1/2 -left-5 sm:-left-4 lg:-left-8 transform -translate-y-1/2 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.4s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('soutien')}>
+                <div className={`absolute top-1/2 -left-5 sm:-left-4 lg:-left-8 transform -translate-y-1/2 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.2s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('soutien')}>
                   <Hexagon image="support.jpg" isSelected={activeHex === 'soutien'} />
                   <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
                     <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'soutien' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Soutien</span>
@@ -299,7 +302,7 @@ export default function SubsidiariteScreen() {
                 </div>
                 
                 {/* Top-left hexagon */}
-                <div className={`absolute -top-2 sm:top-0 left-1/8 sm:left-1/7 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.75s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('clarte')}>
+                <div className={`absolute -top-2 sm:top-0 left-1/8 sm:left-1/7 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.5s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('clarte')}>
                   <Hexagon image="clarity.jpg" isSelected={activeHex === 'clarte'} />
                   <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
                     <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'clarte' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Clarté</span>

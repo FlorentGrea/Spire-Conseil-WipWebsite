@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { useMousePosition } from "../../utils/mouseCoordinates"
+import { getDynamicShadow } from "../../utils/dynamicShadow"
 
 
 
@@ -24,6 +25,7 @@ export default function NotreEquipeScreen() {
   const [shouldAnimate, setShouldAnimate] = useState(false)
   const [isLargeScreen, setIsLargeScreen] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
+  const [shadowTime, setShadowTime] = useState(0)
   const mousePosition = useMousePosition()
   const screenRef = useRef<HTMLDivElement>(null)
   const lastScrollTime = useRef(0)
@@ -272,40 +274,30 @@ export default function NotreEquipeScreen() {
   // Set mounted state and responsive hexagon size
   useEffect(() => {
     setHasMounted(true);
+    
+    // Update shadow animation every frame
+    const interval = setInterval(() => {
+      setShadowTime(Date.now());
+    }, 16); // ~60fps
+    
     const checkSize = () => {
       setIsMd(window.innerWidth >= 768);
       setIsLargeScreen(window.innerWidth >= 1024);
     };
     checkSize();
     window.addEventListener('resize', checkSize);
-    return () => window.removeEventListener('resize', checkSize);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', checkSize);
+    };
   }, []);
 
   // Responsive hexagon size for all hexagons
   const hexSize = isMd ? 100 : 70;
   const svgSize = isMd ? 220 : 180;
 
-  // Function to calculate dynamic shadow for active hexagon
-  const getDynamicShadow = (hexIndex: number) => {
-    if (activeHexagon !== hexIndex || !hasMounted || mousePosition.x === 0 && mousePosition.y === 0) return '';
-    
-    // Calculate the normalized position of the mouse in the browser window
-    const xPercent = mousePosition.x / window.innerWidth - 0.5;
-    const yPercent = mousePosition.y / window.innerHeight - 0.5;
-    
-    const moveX = xPercent * 20; // Reduced multiplier for closer shadow
-    const moveY = yPercent * 20; // Reduced multiplier for closer shadow
-    
-    // Create a gradient-like effect by alternating colors
-    const intensity = Math.abs(xPercent) + Math.abs(yPercent);
-    const blueIntensity = Math.max(0, 1 - intensity);
-    const yellowIntensity = Math.min(1, intensity);
-    
-    // Blend the colors based on mouse position with more vibrant colors
-    const blendedColor = `rgba(${Math.round(0 * blueIntensity + 255 * yellowIntensity)}, ${Math.round(50 * blueIntensity + 255 * yellowIntensity)}, ${Math.round(150 * blueIntensity + 0 * yellowIntensity)}, 0.9)`;
-    
-    return `${moveX}px ${moveY}px 8px ${blendedColor}`;
-  };
+
 
 
 
@@ -316,7 +308,7 @@ export default function NotreEquipeScreen() {
       data-screen="notre-equipe"
     >
       <div className="max-w-6xl xl:max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 w-full flex flex-col items-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 sm:mb-8 mt-8 sm:mt-12 md:mt-16 text-center">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#012073] mb-6 sm:mb-8 mt-8 sm:mt-12 md:mt-16 text-center">
           Notre Équipe
         </h1>
         
@@ -346,7 +338,7 @@ export default function NotreEquipeScreen() {
             >
               <div className="relative overflow-hidden w-full min-h-[160px] sm:min-h-[200px] flex items-center justify-center">
                 <div className="w-full flex flex-col items-center justify-center">
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-3 sm:mb-4">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#012073] mb-3 sm:mb-4">
                     {content.title}
                   </h2>
                   <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
@@ -371,9 +363,6 @@ export default function NotreEquipeScreen() {
                 viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
                 className="drop-shadow-lg"
                 style={{
-                  filter: activeHexagon === 0 
-                    ? 'none' 
-                    : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
                   overflow: 'visible'
                 }}
                 onClick={() => handleHexagonClick(0)}
@@ -391,7 +380,7 @@ export default function NotreEquipeScreen() {
                   className="hover:drop-shadow-xl"
                   transform="rotate(-90 0 0)"
                   style={{
-                    filter: activeHexagon === 0 ? `drop-shadow(${getDynamicShadow(0)})` : ''
+                    filter: activeHexagon === 0 ? `drop-shadow(0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)})` : 'drop-shadow(0 6px 8px -1px rgba(0, 0, 0, 0.1))'
                   }}
                 />
                   <image
@@ -412,9 +401,6 @@ export default function NotreEquipeScreen() {
                   viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
                   className="drop-shadow-lg"
                   style={{
-                    filter: activeHexagon === 1 
-                      ? 'none' 
-                      : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
                     overflow: 'visible'
                   }}
                   onClick={() => handleHexagonClick(1)}
@@ -432,7 +418,7 @@ export default function NotreEquipeScreen() {
                   className="hover:drop-shadow-xl"
                   transform="rotate(-90 0 0)"
                   style={{
-                    filter: activeHexagon === 1 ? `drop-shadow(${getDynamicShadow(1)})` : ''
+                    filter: activeHexagon === 1 ? `drop-shadow(0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)})` : 'drop-shadow(0 6px 8px -1px rgba(0, 0, 0, 0.1))'
                   }}
                 />
                   <image

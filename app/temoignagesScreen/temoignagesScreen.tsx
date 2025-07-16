@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useMousePosition } from "../../utils/mouseCoordinates"
+import { getDynamicShadow } from "../../utils/dynamicShadow"
 import {
   Carousel,
   CarouselContent,
@@ -14,6 +15,7 @@ export default function TemoignagesScreen() {
   const [api, setApi] = useState<unknown>(null)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [hasMounted, setHasMounted] = useState(false)
+  const [shadowTime, setShadowTime] = useState(0)
   const mousePosition = useMousePosition()
 
   // Auto-advance carousel every 5 seconds
@@ -23,9 +25,16 @@ export default function TemoignagesScreen() {
     }
   }, [api])
 
-  // Set mounted state
+  // Set mounted state and update shadow animation
   useEffect(() => {
     setHasMounted(true);
+    
+    // Update shadow animation every frame
+    const interval = setInterval(() => {
+      setShadowTime(Date.now());
+    }, 16); // ~60fps
+    
+    return () => clearInterval(interval);
   }, []);
 
   // Track current slide for animations
@@ -57,39 +66,17 @@ export default function TemoignagesScreen() {
     }
   ]
 
-  // Function to calculate dynamic shadow for video
-  const getDynamicShadow = () => {
-    if (!hasMounted || mousePosition.x === 0 && mousePosition.y === 0) return 'drop-shadow(0 8px 18px rgba(0,0,0,0.5))';
-    
-    // Calculate the normalized position of the mouse in the browser window
-    const xPercent = mousePosition.x / window.innerWidth - 0.5;
-    const yPercent = mousePosition.y / window.innerHeight - 0.5;
-    
-    const moveX = xPercent * 20;
-    const moveY = yPercent * 20;
-    
-    // Create a gradient-like effect by alternating colors
-    const intensity = Math.abs(xPercent) + Math.abs(yPercent);
-    const blueIntensity = Math.max(0, 1 - intensity);
-    const yellowIntensity = Math.min(1, intensity);
-    
-    // Blend the colors based on mouse position with more vibrant colors
-    const blendedColor = `rgba(${Math.round(0 * blueIntensity + 255 * yellowIntensity)}, ${Math.round(50 * blueIntensity + 255 * yellowIntensity)}, ${Math.round(150 * blueIntensity + 0 * yellowIntensity)}, 0.9)`;
-    
-    return `drop-shadow(${moveX}px ${moveY}px 8px ${blendedColor})`;
-  };
-
   return (
-    <div className="flex flex-col items-center w-full h-screen snap-start pt-10 sm:pt-16 md:pt-24 lg:pt-32 pb-6 sm:pb-10 md:pb-16 lg:pb-20 box-border" data-screen="temoignages">
-      <div className="max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex flex-col items-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 sm:mb-8 mt-8 sm:mt-12 md:mt-16 text-center">
+    <div className="flex flex-col items-center w-full h-screen snap-start pt-0 pb-6 sm:pb-10 md:pb-16 lg:pb-20 box-border" data-screen="temoignages">
+      <div className="max-w-6xl xl:max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 w-full h-full flex flex-col items-center justify-center pt-12 sm:pt-16 md:pt-20 lg:pt-24">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#012073] mb-4 sm:mb-6 md:mb-8 mt-4 sm:mt-8 md:mt-12 lg:mt-16 text-center px-2">
           Ils nous font confiance
         </h1>
         
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full max-w-6xl items-center">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8 lg:gap-12 w-full max-w-6xl items-center justify-center">
           {/* Video Section */}
-          <div className="flex-1 flex items-center">
-            <div className="w-full aspect-video rounded-lg overflow-hidden" style={{ filter: getDynamicShadow() }}>
+          <div className="flex-1 flex items-center justify-center w-full lg:w-auto">
+            <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-none aspect-video rounded-lg sm:rounded-xl overflow-hidden" style={{ boxShadow: `0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)}, 0 4px 6px -1px ${getDynamicShadow(hasMounted, shadowTime)}` }}>
               <iframe
                 src="https://www.youtube.com/embed/ZAmK31x3qDs"
                 title="Témoignage Spire Conseil"
@@ -101,33 +88,33 @@ export default function TemoignagesScreen() {
           </div>
           
           {/* Carousel Section */}
-          <div className="flex-1 flex items-center">
+          <div className="flex-1 flex items-center justify-center w-full lg:w-auto px-2 sm:px-4">
             <Carousel
               opts={{
                 align: "start",
                 loop: true,
               }}
               setApi={setApi}
-              className="w-full max-w-[calc(100%-6rem)] h-[450px]"
+              className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-none"
             >
-              <CarouselContent>
+              <CarouselContent className="overflow-visible -ml-2 sm:-ml-4">
                 {testimonials.map((testimonial, index) => (
-                  <CarouselItem key={index} className="pl-0 h-[450px]">
+                  <CarouselItem key={index} className="pl-2 sm:pl-4 pr-2 sm:pr-4">
                     <div 
-                      className={`bg-white p-6 rounded-lg h-full flex flex-col justify-center transition-all duration-700 ease-in-out ${
+                      className={`bg-white p-3 sm:p-4 md:p-5 lg:p-6 rounded-lg min-h-[300px] sm:min-h-[350px] md:min-h-[400px] lg:min-h-[450px] flex flex-col justify-between transition-all duration-700 ease-in-out ${
                         currentSlide === index 
                           ? 'opacity-100 scale-100' 
                           : 'opacity-60 scale-95'
                       }`}
                     >
-                      <blockquote className="text-lg text-gray-700 leading-relaxed mb-4">
+                      <blockquote className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-700 leading-relaxed mb-4 flex-grow text-left">
                         {testimonial.quote}
                       </blockquote>
-                      <div className="border-t border-gray-200 pt-4">
-                        <h4 className="font-semibold text-gray-900">
+                      <div className="border-t border-gray-200 pt-3 sm:pt-4">
+                        <h4 className="font-semibold text-gray-900 text-xs sm:text-sm md:text-base lg:text-lg text-left">
                           {testimonial.author}
                         </h4>
-                        <small className="text-gray-600">
+                        <small className="text-gray-600 text-xs sm:text-sm text-left">
                           {testimonial.position}
                         </small>
                       </div>
@@ -135,8 +122,8 @@ export default function TemoignagesScreen() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="hidden lg:flex" />
-              <CarouselNext className="hidden lg:flex" />
+              <CarouselPrevious className="hidden sm:flex" />
+              <CarouselNext className="hidden sm:flex" />
             </Carousel>
           </div>
         </div>

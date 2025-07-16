@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useMousePosition } from "../../utils/mouseCoordinates";
+import { getDynamicShadow } from "../../utils/dynamicShadow";
 
 export default function ContactScreen() {
   const [form, setForm] = useState({
@@ -14,11 +15,19 @@ export default function ContactScreen() {
   });
   const [status, setStatus] = useState<string | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
+  const [shadowTime, setShadowTime] = useState(0);
   const mousePosition = useMousePosition();
 
-  // Set mounted state
+  // Set mounted state and update shadow animation
   useEffect(() => {
     setHasMounted(true);
+    
+    // Update shadow animation every frame
+    const interval = setInterval(() => {
+      setShadowTime(Date.now());
+    }, 16); // ~60fps
+    
+    return () => clearInterval(interval);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -50,27 +59,7 @@ export default function ContactScreen() {
     }
   };
 
-  // Function to calculate dynamic shadow for form
-  const getDynamicShadow = () => {
-    if (!hasMounted || mousePosition.x === 0 && mousePosition.y === 0) return 'drop-shadow(0 8px 18px rgba(0,0,0,0.5))';
-    
-    // Calculate the normalized position of the mouse in the browser window
-    const xPercent = mousePosition.x / window.innerWidth - 0.5;
-    const yPercent = mousePosition.y / window.innerHeight - 0.5;
-    
-    const moveX = xPercent * 20;
-    const moveY = yPercent * 20;
-    
-    // Create a gradient-like effect by alternating colors
-    const intensity = Math.abs(xPercent) + Math.abs(yPercent);
-    const blueIntensity = Math.max(0, 1 - intensity);
-    const yellowIntensity = Math.min(1, intensity);
-    
-    // Blend the colors based on mouse position with brand colors
-    const blendedColor = `rgba(${Math.round(1 * blueIntensity + 247 * yellowIntensity)}, ${Math.round(32 * blueIntensity + 228 * yellowIntensity)}, ${Math.round(115 * blueIntensity + 0 * yellowIntensity)}, 0.9)`;
-    
-    return `drop-shadow(${moveX}px ${moveY}px 8px ${blendedColor})`;
-  };
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] w-full snap-start box-border" data-screen="contact">
@@ -78,12 +67,12 @@ export default function ContactScreen() {
         
         {/* Left Section - Contact Info */}
         <div className="flex-1 flex flex-col items-center lg:items-start max-w-sm sm:max-w-md lg:max-w-none">
-                    <div className="bg-gradient-to-br from-[#012073] to-[#1e40af] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 text-white w-full" style={{ filter: getDynamicShadow() }}>
+                    <div className="bg-gradient-to-br from-[#012073] to-[#1e40af] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 text-white w-full" style={{ boxShadow: `0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)}, 0 4px 6px -1px ${getDynamicShadow(hasMounted, shadowTime)}` }}>
             <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-x-4 md:gap-x-6">
               {/* Left side - Contact info */}
               <div className="flex-1 min-w-[180px]">
                 <div className="flex items-center mb-2 sm:mb-3 md:mb-4 lg:mb-6">
-                  <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-[#f7e400] rounded-full flex items-center justify-center mr-2 sm:mr-3 md:mr-4">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-white rounded-full flex items-center justify-center mr-2 sm:mr-3 md:mr-4">
                     <svg className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-[#012073]" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                     </svg>
@@ -96,7 +85,7 @@ export default function ContactScreen() {
                 
                 <div className="space-y-1.5 sm:space-y-2 md:space-y-3 lg:space-y-4">
                   <div className="flex items-center">
-                    <div className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 bg-[#f7e400] rounded-full flex items-center justify-center mr-1.5 sm:mr-2 md:mr-3">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 bg-white rounded-full flex items-center justify-center mr-1.5 sm:mr-2 md:mr-3">
                       <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4 text-[#012073]" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                         <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
@@ -108,7 +97,7 @@ export default function ContactScreen() {
                   </div>
                   
                   <div className="flex items-center">
-                    <div className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 bg-[#f7e400] rounded-full flex items-center justify-center mr-1.5 sm:mr-2 md:mr-3">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 bg-white rounded-full flex items-center justify-center mr-1.5 sm:mr-2 md:mr-3">
                       <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4 text-[#012073]" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                       </svg>
@@ -137,7 +126,7 @@ export default function ContactScreen() {
         
                 {/* Right Section - Contact Form */}
         <div className="flex-1 flex items-center justify-center max-w-sm sm:max-w-lg lg:max-w-none">
-          <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 w-full shadow-xl" style={{ filter: getDynamicShadow() }}>
+          <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 w-full shadow-xl" style={{ boxShadow: `0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)}, 0 4px 6px -1px ${getDynamicShadow(hasMounted, shadowTime)}` }}>
             <div className="flex items-center mb-2 sm:mb-3 md:mb-4 lg:mb-6">
               <div className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 bg-[#012073] rounded-full flex items-center justify-center mr-1.5 sm:mr-2 md:mr-3">
                 <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">

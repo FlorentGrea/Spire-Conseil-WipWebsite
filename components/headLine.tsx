@@ -154,7 +154,7 @@ export default function HeadLine() {
                       initial="animate"
                       animate="exit"
                       exit="exit"
-                      className="absolute left-0 right-0 w-full flex justify-center items-center text-center text-xs sm:text-sm md:text-base lg:text-lg font-bold text-gray-700 whitespace-nowrap"
+                      className="absolute left-0 right-0 w-full flex justify-center items-center text-center text-xs sm:text-sm md:text-base lg:text-lg font-bold text-[#012073] whitespace-nowrap"
                     >
                       {screenNames[prev]}
                     </motion.span>
@@ -165,7 +165,7 @@ export default function HeadLine() {
                     variants={textVariants}
                     initial="initial"
                     animate="animate"
-                    className="absolute left-0 right-0 w-full flex justify-center items-center text-center text-xs sm:text-sm md:text-base lg:text-lg font-bold text-gray-700 whitespace-nowrap"
+                    className="absolute left-0 right-0 w-full flex justify-center items-center text-center text-xs sm:text-sm md:text-base lg:text-lg font-bold text-[#012073] whitespace-nowrap"
                   >
                     {screenNames[current]}
                   </motion.span>
@@ -177,7 +177,7 @@ export default function HeadLine() {
                 width="16" 
                 height="16" 
                 viewBox="0 0 20 20" 
-                className="text-gray-700 mr-2 sm:mr-3 md:mr-4 lg:mr-5 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7"
+                className="text-[#012073] mr-2 sm:mr-3 md:mr-4 lg:mr-5 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7"
               >
                 <line x1="2" y1="4" x2="18" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -198,7 +198,7 @@ export default function HeadLine() {
                     className={`w-full text-left px-2 sm:px-3 md:px-4 lg:px-5 py-1 sm:py-2 md:py-3 lg:py-4 text-xs sm:text-sm md:text-base lg:text-lg font-medium transition-colors hover:bg-gray-100 ${
                       current === index 
                         ? 'text-blue-600 bg-blue-50' 
-                        : 'text-gray-700'
+                        : 'text-[#012073]'
                     }`}
                   >
                     {name}

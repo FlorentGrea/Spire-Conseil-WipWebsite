@@ -145,11 +145,21 @@
     margin: 0;
     padding: 0;
     @apply bg-background text-foreground;
-    font-family: 'Charter', 'Georgia', 'Cambria', 'Times New Roman', serif;
+    font-family: 'Arial', sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Charter', 'Georgia', 'Cambria', 'Times New Roman', serif;
+    font-family: 'Georgia', serif;
     font-weight: bold;
+  }
+  p, span, div, a, button, input, textarea, label {
+    font-family: 'Arial', sans-serif;
+  }
+  .font-heading {
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+  }
+  .font-body {
+    font-family: 'Arial', sans-serif;
   }
 }
 
@@ -242,6 +252,20 @@ html, body {
 
 .animate-draw-circle {
   animation: draw-circle 3s ease-in-out forwards;
+}
+
+/* Drawing line animation */
+@keyframes draw-line {
+  0% {
+    stroke-dashoffset: 3000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw-line {
+  animation: draw-line 3s ease-in-out forwards;
 }
 
 .animate-dot-move {

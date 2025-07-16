@@ -8,6 +8,7 @@ export default function TimelineScreen() {
   const [selectedHex, setSelectedHex] = useState<number|null>(null);
   const [activeTab, setActiveTab] = useState<'description' | 'situation' | 'details'>('description');
   const [hasMounted, setHasMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const mousePosition = useMousePosition();
   const hexData = [
     {
@@ -60,6 +61,25 @@ export default function TimelineScreen() {
     setHasMounted(true);
   }, []);
 
+  // Intersection observer for drawing animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    const element = document.querySelector('[data-screen="timeline"]');
+    if (element) {
+      observer.observe(element);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   // Function to calculate dynamic shadow for popup
   const getDynamicShadow = () => {
     if (!hasMounted || mousePosition.x === 0 && mousePosition.y === 0) return 'drop-shadow(0 8px 18px rgba(0,0,0,0.5))';
@@ -84,7 +104,7 @@ export default function TimelineScreen() {
 
   return (
     <div className="flex flex-col items-center w-full h-screen snap-start pt-10 sm:pt-16 md:pt-24 lg:pt-32 pb-6 sm:pb-10 md:pb-16 lg:pb-20 box-border"  data-screen="timeline">
-      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 md:mb-8 mt-4 sm:mt-8 md:mt-12 lg:mt-16 text-center px-2">
+      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#012073] mb-4 sm:mb-6 md:mb-8 mt-4 sm:mt-8 md:mt-12 lg:mt-16 text-center px-2">
         4 offres pour un parcours complet
       </h1>
       <div className="grid grid-cols-2 md:grid-cols-4 grid-rows-4 md:grid-rows-2 gap-2 sm:gap-4 w-full max-w-6xl xl:max-w-7xl relative h-full flex-1 min-h-0">
@@ -97,39 +117,61 @@ export default function TimelineScreen() {
           preserveAspectRatio="none"
           style={{ zIndex: 0 }}
         >
-          {/* Simple connecting line */}
+          <defs>
+            {/* Desktop gradient - horizontal line */}
+            <linearGradient id="timelineGradientDesktop" x1="0%" y1="0%" x2="60%" y2="0%">
+              <stop offset="0%" stopColor="#fbbf24" />
+              <stop offset="30%" stopColor="#fbbf24" />
+              <stop offset="100%" stopColor="#012073" />
+            </linearGradient>
+            
+            {/* Mobile gradient - zigzag line */}
+            <linearGradient id="timelineGradientMobile" x1="0%" y1="0%" x2="0%" y2="60%">
+              <stop offset="0%" stopColor="#fbbf24" />
+              <stop offset="30%" stopColor="#fbbf24" />
+              <stop offset="100%" stopColor="#012073" />
+            </linearGradient>
+          </defs>
+          
+          {/* Simple connecting line with yellow gradient at start */}
           {isMd ? (
             <polyline
               points="125,250 375,750 625,250 875,750"
               fill="none"
-              stroke="#012073"
+              stroke="url(#timelineGradientDesktop)"
               strokeWidth="30"
               strokeLinecap="round"
+              strokeDasharray="3000"
+              strokeDashoffset="3000"
+              className={`${isVisible ? 'animate-draw-line' : ''}`}
             />
           ) : (
             <polyline
               points="250,120 750,370 250,620 750,870"
               fill="none"
-              stroke="#012073"
+              stroke="url(#timelineGradientMobile)"
               strokeWidth="30"
               strokeLinecap="round"
+              strokeDasharray="3000"
+              strokeDashoffset="3000"
+              className={`${isVisible ? 'animate-draw-line' : ''}`}
             />
           )}
         </svg>
         {/* Hexagons and titles */}
-        <div className="flex items-center justify-center col-start-1 row-start-1 w-24 w-auto">
+        <div className={`flex items-center justify-center col-start-1 row-start-1 w-24 w-auto ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0s' : '0s', animationFillMode: 'both' }}>
           <Hexagon image={hexData[0].image} onClick={() => setSelectedHex(0)} />
         </div>
         <div className="flex items-center md:items-start justify-start md:justify-center col-start-2 md:col-start-1 row-start-1 md:row-start-2 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[0].title}</h2></div>
-        <div className="flex items-center justify-center col-start-2 md:col-start-2 row-start-2 md:row-start-2 w-24 w-auto">
+        <div className={`flex items-center justify-center col-start-2 md:col-start-2 row-start-2 md:row-start-2 w-24 w-auto ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.4s' : '0s', animationFillMode: 'both' }}>
           <Hexagon image={hexData[1].image} onClick={() => setSelectedHex(1)} />
         </div>
         <div className="flex items-center md:items-end justify-end md:justify-center col-start-1 md:col-start-2 row-start-2 md:row-start-1 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[1].title}</h2></div>
-        <div className="flex items-center justify-center col-start-1 md:col-start-3 row-start-3 md:row-start-1 w-24 w-auto">
+        <div className={`flex items-center justify-center col-start-1 md:col-start-3 row-start-3 md:row-start-1 w-24 w-auto ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.8s' : '0s', animationFillMode: 'both' }}>
           <Hexagon image={hexData[2].image} onClick={() => setSelectedHex(2)} />
         </div>
         <div className="flex items-center md:items-start justify-start md:justify-center col-start-2 md:col-start-3 row-start-3 md:row-start-2 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[2].title}</h2></div>
-        <div className="flex items-center justify-center col-start-2 md:col-start-4 row-start-4 md:row-start-2 w-24 w-auto">
+        <div className={`flex items-center justify-center col-start-2 md:col-start-4 row-start-4 md:row-start-2 w-24 w-auto ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.2s' : '0s', animationFillMode: 'both' }}>
           <Hexagon image={hexData[3].image} onClick={() => setSelectedHex(3)} />
         </div>
         <div className="flex items-center md:items-end justify-end md:justify-center col-start-1 md:col-start-4 row-start-4 md:row-start-1 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[3].title}</h2></div>
