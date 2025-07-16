@@ -182,3 +182,52 @@ html, body {
   100% { background-position: 0% 50%; }
 }
 
+/* Custom slow spin animation */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+/* Fade in up animation for hexagons */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* Drawing circle animation */
+@keyframes draw-circle {
+  0% {
+    stroke-dashoffset: 260;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw-circle {
+  animation: draw-circle 3s ease-in-out forwards;
+}
+
+.animate-dot-move {
+  animation: dot-move 3s ease-in-out forwards;
+  transform-origin: 50px 50px;
+}
+
