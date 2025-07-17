@@ -162,19 +162,35 @@ export default function TimelineScreen() {
         <div className={`flex items-center justify-center col-start-1 row-start-1 w-24 w-auto ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0s' : '0s', animationFillMode: 'both' }}>
           <Hexagon image={hexData[0].image} onClick={() => setSelectedHex(0)} />
         </div>
-        <div className="flex items-center md:items-start justify-start md:justify-center col-start-2 md:col-start-1 row-start-1 md:row-start-2 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[0].title}</h2></div>
+        <div className={`flex items-center md:items-start justify-start md:justify-center col-start-2 md:col-start-1 row-start-1 md:row-start-2 md:text-center flex-grow ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0s' : '0s', animationFillMode: 'both' }}>
+            <h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-center leading-tight text-[#012073]">
+              {hexData[0].title}
+            </h2>
+        </div>
         <div className={`flex items-center justify-center col-start-2 md:col-start-2 row-start-2 md:row-start-2 w-24 w-auto ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.4s' : '0s', animationFillMode: 'both' }}>
           <Hexagon image={hexData[1].image} onClick={() => setSelectedHex(1)} />
         </div>
-        <div className="flex items-center md:items-end justify-end md:justify-center col-start-1 md:col-start-2 row-start-2 md:row-start-1 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[1].title}</h2></div>
+        <div className={`flex items-center md:items-end justify-end md:justify-center col-start-1 md:col-start-2 row-start-2 md:row-start-1 md:text-center flex-grow ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.4s' : '0s', animationFillMode: 'both' }}>
+            <h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-center leading-tight text-[#012073]">
+              {hexData[1].title}
+            </h2>
+        </div>
         <div className={`flex items-center justify-center col-start-1 md:col-start-3 row-start-3 md:row-start-1 w-24 w-auto ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.8s' : '0s', animationFillMode: 'both' }}>
           <Hexagon image={hexData[2].image} onClick={() => setSelectedHex(2)} />
         </div>
-        <div className="flex items-center md:items-start justify-start md:justify-center col-start-2 md:col-start-3 row-start-3 md:row-start-2 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[2].title}</h2></div>
+        <div className={`flex items-center md:items-start justify-start md:justify-center col-start-2 md:col-start-3 row-start-3 md:row-start-2 md:text-center flex-grow ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.8s' : '0s', animationFillMode: 'both' }}>
+            <h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-center leading-tight text-[#012073]">
+              {hexData[2].title}
+            </h2>
+        </div>
         <div className={`flex items-center justify-center col-start-2 md:col-start-4 row-start-4 md:row-start-2 w-24 w-auto ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.2s' : '0s', animationFillMode: 'both' }}>
           <Hexagon image={hexData[3].image} onClick={() => setSelectedHex(3)} />
         </div>
-        <div className="flex items-center md:items-end justify-end md:justify-center col-start-1 md:col-start-4 row-start-4 md:row-start-1 md:text-center flex-grow"><h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-[#012073] my-1 sm:my-2 md:my-4 max-w-xs mx-auto px-1 text-center">{hexData[3].title}</h2></div>
+        <div className={`flex items-center md:items-end justify-end md:justify-center col-start-1 md:col-start-4 row-start-4 md:row-start-1 md:text-center flex-grow ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.2s' : '0s', animationFillMode: 'both' }}>
+            <h2 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold text-center leading-tight text-[#012073]">
+              {hexData[3].title}
+            </h2>
+        </div>
       </div>
       {/* Modal Popup */}
       {selectedHex !== null && (

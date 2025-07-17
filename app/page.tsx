@@ -1,3 +1,4 @@
+import HomeScreen from "@/app/homeScreen/homeScreen";
 import TimelineScreen from "@/app/timelineScreen/timelineScreen";
 import SubsidiariteScreen from "@/app/subsidiariteScreen/subsidiariteScreen";
 import TemoignagesScreen from "@/app/temoignagesScreen/temoignagesScreen";
@@ -9,6 +10,7 @@ export default function Home() {
   return (
     <div className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory relative">
       <HeadLine />
+      <HomeScreen />
       <TimelineScreen />
       <SubsidiariteScreen />
       <TemoignagesScreen />
