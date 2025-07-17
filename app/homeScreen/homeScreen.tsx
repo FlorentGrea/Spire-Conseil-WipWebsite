@@ -7,7 +7,7 @@ import { getDynamicShadow } from "../../utils/dynamicShadow";
 function Hexagon() {
   
   return (
-    <div className="relative aspect-square w-32 md:w-64 lg:w-96" style={{ minWidth: '128px', minHeight: '128px' }}>
+    <div className="relative aspect-square w-48 md:w-64 lg:w-96" style={{ minWidth: '0', minHeight: '0' }}>
       {/* Animated hexagon lines and image in one SVG */}
       <svg
         className="size-full"
