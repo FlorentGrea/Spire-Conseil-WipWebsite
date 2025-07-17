@@ -81,7 +81,7 @@ function Hexagon() {
 export default function HomeScreen() {
 
   return (
-    <div className="flex items-center justify-center w-full h-screen snap-start pt-[56px]" data-screen="home">
+    <div className="flex items-center justify-center w-full h-screen snap-start" data-screen="home">
       <div className="flex flex-wrap items-center justify-center gap-2 lg:gap-12 max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Hexagon Section */}
         <Hexagon />
