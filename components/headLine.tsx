@@ -26,10 +26,21 @@ export default function HeadLine() {
   };
 
   const scrollToSection = (sectionIndex: number) => {
-    const sections = document.querySelectorAll('[class*="snap-start"]');
-    if (sections[sectionIndex]) {
-      sections[sectionIndex].scrollIntoView({ behavior: "smooth" });
+    let targetSection;
+    
+    if (sectionIndex === 1) {
+      // For "Nos Offres", scroll to the first offer screen
+      targetSection = document.querySelector('[data-screen="offers0"]');
+    } else {
+      // For other sections, use the original logic
+      const sections = document.querySelectorAll('[class*="snap-start"]');
+      targetSection = sections[sectionIndex];
     }
+    
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: "smooth" });
+    }
+    
     // Update navigation state immediately for clicks and prevent observer interference
     if (sectionIndex !== current) {
       setIsNavigating(true);
@@ -49,7 +60,8 @@ export default function HeadLine() {
   useEffect(() => {
     const screens = [
       document.querySelector('[data-screen="home"]'),
-      document.querySelector('[data-screen="timeline"]'),
+      // Handle multiple offer screens - check if any offer screen is visible
+      ...Array.from({ length: 4 }, (_, i) => document.querySelector(`[data-screen="offers${i}"]`)),
       document.querySelector('[data-screen="subsidiarite"]'),
       document.querySelector('[data-screen="temoignages"]'),
       document.querySelector('[data-screen="notre-equipe"]'),
@@ -63,9 +75,14 @@ export default function HeadLine() {
             const screenIndex = screens.findIndex(screen => screen === entry.target);
             
             if (screenIndex !== -1 && screenIndex !== current) {
-              setPrev(current);
-              setCurrent(screenIndex);
-              setDirection(screenIndex > current ? 'up' : 'down');
+              // If it's an offer screen (index 1-4), set current to 1 (Nos Offres)
+              const newCurrent = screenIndex >= 1 && screenIndex <= 4 ? 1 : screenIndex;
+              
+              if (newCurrent !== current) {
+                setPrev(current);
+                setCurrent(newCurrent);
+                setDirection(newCurrent > current ? 'up' : 'down');
+              }
             }
           }
         });

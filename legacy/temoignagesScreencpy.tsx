@@ -144,3 +144,47 @@ export default function TemoignagesScreen() {
     </div>
   )
 }
+
+
+
+
+
+            {/* Content Section */}
+            <div 
+              className={`w-[90%] px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white h-[70vh] transition-all duration-1000 ease-out ${
+                isVisible ? 'translate-x-[0%]' : 'translate-x-[100%]'
+              }`}
+            >
+              <h1 className="text-lg lg:text-4xl font-bold text-[#012073] mb-4 text-center lg:text-left leading-tight">
+                {offer.title}
+              </h1>
+              
+              {/* Tab Buttons */}
+              <div className="flex gap-2 mb-6 justify-center">
+                <button 
+                  className={`px-3 py-2 rounded-lg font-semibold transition-colors text-xs md:text-sm ${activeTab === 'description' ? 'bg-[#012073] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                  onClick={() => setActiveTab('description')}
+                >
+                  Description
+                </button>
+                <button 
+                  className={`px-3 py-2 rounded-lg font-semibold transition-colors text-xs md:text-sm ${activeTab === 'useCase' ? 'bg-[#012073] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                  onClick={() => setActiveTab('useCase')}
+                >
+                  Cas d'usage
+                </button>
+                <button 
+                  className={`px-3 py-2 rounded-lg font-semibold transition-colors text-xs md:text-sm ${activeTab === 'method' ? 'bg-[#012073] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                  onClick={() => setActiveTab('method')}
+                >
+                  Méthode
+                </button>
+              </div>
+                  
+              {/* Content based on active tab */}
+              <div className="text-xs lg:text-xl text-gray-700 leading-relaxed space-y-4 sm:space-y-6 text-center lg:text-left">
+                {activeTab === 'description' && (<p>{offer.description}</p>)}
+                {activeTab === 'useCase' && (<p>{offer.useCase}</p>)}
+                {activeTab === 'method' && (<p>{offer.method}</p>)}
+              </div>
+            </div>
