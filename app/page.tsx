@@ -1,5 +1,5 @@
 import HomeScreen from "@/app/homeScreen/homeScreen";
-import TimelineScreen from "@/app/timelineScreen/timelineScreen";
+import OffersScreen from "@/app/timelineScreen/offersScreen";
 import SubsidiariteScreen from "@/app/subsidiariteScreen/subsidiariteScreen";
 import TemoignagesScreen from "@/app/temoignagesScreen/temoignagesScreen";
 import NotreEquipeScreen from "@/app/notreEquipeScreen/notreEquipeScreen";
@@ -11,7 +11,7 @@ export default function Home() {
     <div className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory relative">
       <HeadLine />
       <HomeScreen />
-      <TimelineScreen />
+      <OffersScreen />
       <SubsidiariteScreen />
       <TemoignagesScreen />
       <NotreEquipeScreen />

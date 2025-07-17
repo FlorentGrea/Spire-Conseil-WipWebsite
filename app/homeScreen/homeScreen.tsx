@@ -17,24 +17,29 @@ function Hexagon() {
           <clipPath id="hexagon-clip">
             <polygon points="0,-55 47,-27.5 47,27.5 0,55 -47,27.5 -47,-27.5" />
           </clipPath>
+          <linearGradient id="hexagonGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#fbbf24" />
+            <stop offset="30%" stopColor="#fbbf24" />
+            <stop offset="100%" stopColor="#012073" />
+          </linearGradient>
         </defs>
 
         {/* Hexagon-shaped image background */}
         <image
-          href="/homeImg.jpg"
-          x="-60"
-          y="-60"
-          width="120"
-          height="120"
+          href="/homeImg.png"
+          x="-40"
+          y="-40"
+          width="80"
+          height="80"
           clipPath="url(#hexagon-clip)"
           preserveAspectRatio="xMidYMid slice"
         />
 
-        {/* Left side of hexagon */}
+        {/* Left side of hexagon with gradient */}
         <polyline 
           points="0,-55 -47,-27.5 -47,27.5 0,55" 
           fill="none"
-          stroke="#012073"
+          stroke="url(#hexagonGradient)"
           strokeWidth="7"
           strokeLinecap="round"
           strokeDasharray="300"
@@ -42,11 +47,11 @@ function Hexagon() {
           className={ 'animate-draw-hexagon' }
         />
 
-        {/* Right side of hexagon */}
+        {/* Right side of hexagon with gradient */}
         <polyline 
           points="0,-55 47,-27.5 47,27.5 0,55" 
           fill="none"
-          stroke="#012073"
+          stroke="url(#hexagonGradient)"
           strokeWidth="7"
           strokeLinecap="round"
           strokeDasharray="300"
@@ -55,7 +60,7 @@ function Hexagon() {
         />
       </svg>
       <svg 
-        className="absolute left-1/2 top-[95%] h-[100vh] w-5" 
+        className="absolute left-1/2 top-[95%] h-[100vh] w-3 md:w-5" 
         style={{ transform: 'translateX(-50%)' }}
         viewBox="0 0 3 100"
         vectorEffect="non-scaling-stroke"
@@ -82,18 +87,18 @@ export default function HomeScreen() {
 
   return (
     <div className="flex items-center justify-center w-full h-screen snap-start" data-screen="home">
-      <div className="flex flex-wrap items-center justify-center gap-2 lg:gap-12 max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 lg:gap-12 max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Hexagon Section */}
         <Hexagon />
         {/* Content Section */}
-        <div className="w-full max-w-sm px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white">
+        <div className="w-full max-w-sm lg:max-w-none px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white flex-grow">
           <h1
-            className="text-lg lg:text-2xl font-bold text-[#012073] mb-4 text-center lg:text-left leading-tight"
+            className="text-lg lg:text-4xl font-bold text-[#012073] mb-4 text-center lg:text-left leading-tight"
           >
             Rafraîchissez vos pratiques managériales
           </h1>              
           <div
-            className="text-xs lg:text-lg text-gray-700 leading-relaxed space-y-4 sm:space-y-6 text-center lg:text-left"
+            className="text-xs lg:text-xl text-gray-700 leading-relaxed space-y-4 sm:space-y-6 text-center lg:text-left"
           >
             <p>
               SPIRE accompagne les organisations dans la transformation de leurs pratiques managériales en valorisant l'autonomie, la responsabilité et soutien mutuel à tous les niveaux. Par la subsidiarité mise en acte, nous faisons du management un levier de performance, d’engagement et de bien-être durable pour l'ensemble des collaborateurs. 
