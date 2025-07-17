@@ -111,7 +111,7 @@ export default function HomeScreen() {
                   animationFillMode: 'both',
                 }}
               >
-                Conseil en management par la subsidiarité
+                Soutenir les managers par la subsidiarité
               </h1>              <div
                 className={`text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-gray-70ding-relaxed space-y-4 sm:space-y-6 transition-all duration-700 ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`}
                 style={{
