@@ -60,7 +60,7 @@ function Hexagon() {
         />
       </svg>
       <svg 
-        className="absolute left-1/2 top-[95%] h-[75vh] w-3 md:w-5" 
+        className="absolute left-1/2 top-[95%] h-[70vh] w-3 md:w-5" 
         style={{ transform: 'translateX(-50%)' }}
         viewBox="0 0 3 100"
         vectorEffect="non-scaling-stroke"

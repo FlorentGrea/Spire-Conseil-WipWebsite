@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useMousePosition } from "../../utils/mouseCoordinates";
 import { getDynamicShadow } from "../../utils/dynamicShadow";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 
 const offersData = [
   {
@@ -90,35 +91,12 @@ function Hexagon({ image }: { image: string }) {
 export default function OffersScreen() {
   return (
     <div className="h-fit snap-start" data-screen="offers">
-      <div className="grid grid-cols-2 grid-rows-2 gap-2 w-full h-screen p-8 relative">
-        {/* Connecting polylines */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="polylineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#fbbf24" />
-              <stop offset="30%" stopColor="#fbbf24" />
-              <stop offset="100%" stopColor="#012073" />
-            </linearGradient>
-          </defs>
-          
-          {/* First polyline - Column 1 */}
-          <polyline
-            points="50,30 20,30 20,70"
-            fill="none"
-            stroke="#fbbf24"
-            strokeWidth="5"
-            strokeLinecap="round"
-          />
-          
-          {/* Second polyline - Column 2 */}
-          <polyline
-            points="50,30 80,30 80,70"
-            fill="none"
-            stroke="#fbbf24"
-            strokeWidth="5"
-            strokeLinecap="round"
-          />
-        </svg>
+      <div className="flex flex-col h-screen justify-center">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white text-center py-4 px-8 z-10 mx-auto bg-gradient-to-br from-[#012073] to-[#1e40af] rounded-xl sm:rounded-2xl shadow-lg">
+          NOS OFFRES
+        </h1>
+        <div className="grid grid-cols-2 grid-rows-2 gap-1 w-full h-[70vh] p-4 relative">
+
         
         {offersData.map((offer, index) => (
           <div 
@@ -126,14 +104,24 @@ export default function OffersScreen() {
             className="flex flex-col items-center justify-center"
             data-screen={`offers${index}`}
           >
-            {/* Hexagon Section */}
-            <Hexagon image={offer.image} />
-            {/* Title */}
-            <h2 className="text-md md:text-xl lg:text-2xl font-bold text-[#012073] text-center leading-tight">
-              {offer.title}
-            </h2>
+            <Card className="w-full h-full relative overflow-hidden">
+              <img 
+                src={`/${offer.image}`}
+                alt={offer.title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#012073]/80 via-[#012073]/40 to-transparent" />
+              <CardContent className="flex flex-col justify-end h-full p-3 relative z-10">
+                <div className="text-white relative z-20">
+                  <CardTitle className="text-sm md:text-base lg:text-lg font-bold">
+                    {offer.title}
+                  </CardTitle>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );
