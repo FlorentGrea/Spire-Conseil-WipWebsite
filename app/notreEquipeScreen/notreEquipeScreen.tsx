@@ -23,7 +23,7 @@ export default function NotreEquipeScreen() {
   const [isScrollLocked, setIsScrollLocked] = useState(false)
   const [isLayoutSwapped, setIsLayoutSwapped] = useState(false)
   const [shouldAnimate, setShouldAnimate] = useState(false)
-  const [isLargeScreen, setIsLargeScreen] = useState(false)
+  const [isSm, setIsSm] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
   const [shadowTime, setShadowTime] = useState(0)
   const mousePosition = useMousePosition()
@@ -282,7 +282,7 @@ export default function NotreEquipeScreen() {
     
     const checkSize = () => {
       setIsMd(window.innerWidth >= 768);
-      setIsLargeScreen(window.innerWidth >= 1024);
+      setIsSm(window.innerWidth >= 640);
     };
     checkSize();
     window.addEventListener('resize', checkSize);
@@ -304,19 +304,18 @@ export default function NotreEquipeScreen() {
   return (
     <div 
       ref={screenRef}
-      className="flex flex-col items-center w-full h-screen snap-start pt-10 sm:pt-16 md:pt-24 lg:pt-32 pb-6 sm:pb-10 md:pb-16 lg:pb-20 box-border" 
-      data-screen="notre-equipe"
+      className="flex items-center justify-center w-full h-screen snap-start" data-screen="notre-equipe"
     >
-      <div className="max-w-6xl xl:max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 w-full flex flex-col items-center">
+      <div className="flex flex-col items-center justify-center gap-2 lg:gap-12 max-w-6xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#012073] mb-6 sm:mb-8 mt-8 sm:mt-12 md:mt-16 text-center">
-          Notre Équipe
+          Les fondateurs
         </h1>
         
         <div className="relative w-full max-w-6xl" style={{ minHeight: "400px" }}>
         {textContent.map((content, index) => (
           <div 
             key={index}
-            className={`flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 w-full max-w-6xl items-center justify-center transition-all duration-300 ease-in-out ${isLayoutSwapped ? 'lg:flex-row-reverse' : ''}`}
+            className={`flex flex-col-reverse sm:flex-row gap-8 lg:gap-12 w-full max-w-6xl items-center justify-center transition-all duration-300 ease-in-out ${isLayoutSwapped ? 'lg:flex-row-reverse' : ''}`}
             style={{
               position: activeHexagon === index ? "relative" : "absolute",
               top: activeHexagon === index ? "auto" : "0",
@@ -336,12 +335,12 @@ export default function NotreEquipeScreen() {
                 transition: "transform 0.3s ease-in-out"
               }}
             >
-              <div className="relative overflow-hidden w-full min-h-[160px] sm:min-h-[200px] flex items-center justify-center">
-                <div className="w-full flex flex-col items-center justify-center">
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#012073] mb-3 sm:mb-4">
-                    {content.title}
-                  </h2>
-                  <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+              <div className="w-full border-2 border-[#012073] rounded-lg p-4 bg-white">
+                <h2 className="text-lg lg:text-4xl font-bold text-[#012073] mb-4 text-center lg:text-left leading-tight">
+                  {content.title}
+                </h2>
+                <div className="text-xs lg:text-xl text-gray-700 leading-relaxed space-y-4 sm:space-y-6 text-center lg:text-left">
+                  <p>
                     {content.description}
                   </p>
                 </div>
@@ -350,39 +349,39 @@ export default function NotreEquipeScreen() {
             
             {/* Alveoles Section */}
             <div 
-              className="flex-1 flex flex-row gap-0 sm:gap-4 lg:grid grid-cols-2 grid-rows-2 overflow-visible"
+              className="flex-1 flex flex-row gap-0 sm:gap-4 sm:grid sm:grid-cols-2 sm:grid-rows-2 overflow-visible"
               style={{
                 transform: activeHexagon === index ? "translateX(0)" : (index % 2 === 0 ? "translateX(-50px)" : "translateX(50px)"),
-                transition: isLargeScreen ? "transform 0.3s ease-in-out" : "none"
-              }}
-            >              
-              <div className="flex justify-end items-end col-start-1 row-start-1 -mr-4 lg:-mr-14 lg:-mb-4" style={{ overflow: 'visible' }}>
-                              <svg
-                width={svgSize}
-                height={svgSize}
-                viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
-                className="drop-shadow-lg"
-                style={{
-                  overflow: 'visible'
+                transition: isSm ? "transform 0.3s ease-in-out" : "none"
                 }}
-                onClick={() => handleHexagonClick(0)}
-              >
+              >              
+              <div className="flex justify-end items-end col-start-1 row-start-1 -mr-4 sm:-mr-15 sm:-mb-10 lg:-mr-14 lg:-mb-4" style={{ overflow: 'visible' }}>
+                <svg
+                  width={svgSize}
+                  height={svgSize}
+                  viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
+                  className="drop-shadow-lg"
+                  style={{
+                    overflow: 'visible'
+                  }}
+                  onClick={() => handleHexagonClick(0)}
+                >
                   <defs>
                     <clipPath id={`hex1-${index}`}>
                       <path d={createHexagonPath(hexSize)} transform="rotate(-90 0 0)" />
                     </clipPath>
                   </defs>
-                                  <path
-                  d={createHexagonPath(hexSize)}
-                  fill="#F1C40F"
-                  stroke="#fff"
-                  strokeWidth="3"
-                  className="hover:drop-shadow-xl"
-                  transform="rotate(-90 0 0)"
-                  style={{
-                    filter: activeHexagon === 0 ? `drop-shadow(0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)})` : 'drop-shadow(0 6px 8px -1px rgba(0, 0, 0, 0.1))'
-                  }}
-                />
+                  <path
+                    d={createHexagonPath(hexSize)}
+                    fill="#F1C40F"
+                    stroke="#fff"
+                    strokeWidth="3"
+                    className="hover:drop-shadow-xl"
+                    transform="rotate(-90 0 0)"
+                    style={{
+                      filter: activeHexagon === 0 ? `drop-shadow(0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)})` : 'drop-shadow(0 6px 8px -1px rgba(0, 0, 0, 0.1))'
+                    }}
+                  />
                   <image
                     href="/leD.webp"
                     x={-hexSize}
@@ -394,7 +393,7 @@ export default function NotreEquipeScreen() {
                   />
                 </svg>
               </div>
-              <div className="flex justify-start items-start col-start-2 row-start-2 -ml-4 lg:-ml-14 lg:-mt-4" style={{ overflow: 'visible' }}>
+              <div className="flex justify-start items-start col-start-2 row-start-2 -ml-4 sm:-ml-15 sm:-mt-10 lg:-ml-14 lg:-mt-4" style={{ overflow: 'visible' }}>
                 <svg
                   width={svgSize}
                   height={svgSize}
@@ -410,17 +409,17 @@ export default function NotreEquipeScreen() {
                       <path d={createHexagonPath(hexSize)} transform="rotate(-90 0 0)" />
                     </clipPath>
                   </defs>
-                                  <path
-                  d={createHexagonPath(hexSize)}
-                  fill="#F1C40F"
-                  stroke="#fff"
-                  strokeWidth="3"
-                  className="hover:drop-shadow-xl"
-                  transform="rotate(-90 0 0)"
-                  style={{
-                    filter: activeHexagon === 1 ? `drop-shadow(0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)})` : 'drop-shadow(0 6px 8px -1px rgba(0, 0, 0, 0.1))'
-                  }}
-                />
+                  <path
+                    d={createHexagonPath(hexSize)}
+                    fill="#F1C40F"
+                    stroke="#fff"
+                    strokeWidth="3"
+                    className="hover:drop-shadow-xl"
+                    transform="rotate(-90 0 0)"
+                    style={{
+                      filter: activeHexagon === 1 ? `drop-shadow(0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)})` : 'drop-shadow(0 6px 8px -1px rgba(0, 0, 0, 0.1))'
+                    }}
+                  />
                   <image
                     href="/leM.jpg"
                     x={-hexSize}

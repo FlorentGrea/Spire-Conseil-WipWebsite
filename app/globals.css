@@ -257,7 +257,7 @@ html, body {
 /* Drawing line animation */
 @keyframes draw-line {
   0% {
-    stroke-dashoffset: 3000;
+    stroke-dashoffset: 200;
   }
   100% {
     stroke-dashoffset: 0;
@@ -265,7 +265,7 @@ html, body {
 }
 
 .animate-draw-line {
-  animation: draw-line 3s ease-in-out 1.1s forwards;
+  animation: draw-line 3s ease-in-out forwards;
 }
 
 /* Drawing hexagon animation */

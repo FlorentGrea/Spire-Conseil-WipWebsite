@@ -62,8 +62,8 @@ export default function ContactScreen() {
 
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] w-full snap-start box-border" data-screen="contact">
-      <div className="w-full max-w-6xl xl:max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-center gap-y-6 md:gap-y-0 md:gap-x-8">
+    <div className="flex items-center justify-center w-full h-screen snap-start" data-screen="contact">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 lg:gap-12 max-w-6xl px-4 sm:px-6 lg:px-8">
         
         {/* Left Section - Contact Info */}
         <div className="flex-1 flex flex-col items-center lg:items-start max-w-sm sm:max-w-md lg:max-w-none">

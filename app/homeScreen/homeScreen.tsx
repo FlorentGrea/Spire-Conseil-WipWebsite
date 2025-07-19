@@ -1,11 +1,42 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { useMousePosition } from "../../utils/mouseCoordinates";
 import { getDynamicShadow } from "../../utils/dynamicShadow";
 
-function Hexagon() {
-  
+const Hexagon = forwardRef<{ getLineRightPosition: () => number | null }>((props, ref) => {
+  const lineRef = useRef<SVGSVGElement>(null);
+  const [lineRightPosition, setLineRightPosition] = useState<number | null>(null);
+
+  // Method to get current line right position (can be called from parent component)
+  const getLineRightPosition = () => {
+    if (lineRef.current) {
+      const rect = lineRef.current.getBoundingClientRect();
+      return rect.right;
+    }
+    return null;
+  };
+
+  // Expose the method to parent component
+  useImperativeHandle(ref, () => ({
+    getLineRightPosition
+  }));
+
+  useEffect(() => {
+    const updateLinePosition = () => {
+      if (lineRef.current) {
+        const rect = lineRef.current.getBoundingClientRect();
+        setLineRightPosition(rect.right);
+      }
+    };
+
+    // Update position on mount and resize
+    updateLinePosition();
+    window.addEventListener('resize', updateLinePosition);
+    
+    return () => window.removeEventListener('resize', updateLinePosition);
+  }, []);
+
   return (
     <div className="relative aspect-square w-48 md:w-64 lg:w-96" style={{ minWidth: '0', minHeight: '0' }}>
       {/* Animated hexagon lines and image in one SVG */}
@@ -60,9 +91,10 @@ function Hexagon() {
         />
       </svg>
       <svg 
-        className="absolute left-1/2 top-[95%] h-[70vh] w-3 md:w-5" 
+        ref={lineRef}
+        className="absolute left-1/2 top-[95%] h-[220vh] w-3 md:w-5" 
         style={{ transform: 'translateX(-50%)' }}
-        viewBox="0 0 3 100"
+        viewBox="0 30 3 270"
         vectorEffect="non-scaling-stroke"
       >
         {/* Line from bottom of hexagon to bottom of screen */}
@@ -74,24 +106,53 @@ function Hexagon() {
           stroke="#012073"
           strokeWidth="100"
           strokeLinecap="round"
-          strokeDasharray="3000"
-          strokeDashoffset="3000"
+          strokeDasharray="200"
+          strokeDashoffset="200"
           className={ 'animate-draw-line' }
         />
       </svg>
     </div>
   );
-}
+});
 
-export default function HomeScreen() {
+const HomeScreen = forwardRef<{ getLineRightPosition: () => number | null }, { onLinePositionChange?: () => void }>(({ onLinePositionChange }, ref) => {
+  const hexagonRef = useRef<{ getLineRightPosition: () => number | null }>(null);
+
+  // Function to get line right position from outside
+  const getLineRightPosition = () => {
+    if (hexagonRef.current) {
+      return hexagonRef.current.getLineRightPosition();
+    }
+    return null;
+  };
+
+  // Expose methods to parent
+  useImperativeHandle(ref, () => ({
+    getLineRightPosition
+  }));
+
+  // Call the callback when position changes
+  useEffect(() => {
+    if (onLinePositionChange) {
+      const timer = setTimeout(() => {
+        onLinePositionChange();
+      }, 100); // Small delay to ensure component is mounted
+      
+      window.addEventListener('resize', onLinePositionChange);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('resize', onLinePositionChange);
+      };
+    }
+  }, [onLinePositionChange]);
 
   return (
     <div className="flex items-center justify-center w-full h-screen snap-start" data-screen="home">
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 lg:gap-12 max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 lg:gap-12 sm:max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Hexagon Section */}
-        <Hexagon />
+        <Hexagon ref={hexagonRef} />
         {/* Content Section */}
-        <div className="w-full max-w-sm lg:max-w-none px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white flex-grow">
+        <div className="w-full max-w-sm sm:max-w-none z-10 border-2 border-[#012073] rounded-lg p-4 bg-white flex-grow">
           <h1
             className="text-lg lg:text-4xl font-bold text-[#012073] mb-4 text-center lg:text-left leading-tight"
           >
@@ -108,4 +169,6 @@ export default function HomeScreen() {
       </div>
     </div>
   );
-} 
+});
+
+export default HomeScreen;

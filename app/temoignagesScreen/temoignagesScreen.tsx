@@ -3,33 +3,28 @@
 import { useEffect, useState } from "react"
 import { useMousePosition } from "../../utils/mouseCoordinates"
 import { getDynamicShadow } from "../../utils/dynamicShadow"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
+
 
 export default function TemoignagesScreen() {
-  const [api, setApi] = useState<unknown>(null)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [hasMounted, setHasMounted] = useState(false)
   const [shadowTime, setShadowTime] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
+  const [startPos, setStartPos] = useState(0)
+  const [currentTranslate, setCurrentTranslate] = useState(0)
+  const [prevTranslate, setPrevTranslate] = useState(0)
   const mousePosition = useMousePosition()
 
   // Auto-advance carousel every 5 seconds
   useEffect(() => {
-    if (!api) return;
-    
     const interval = setInterval(() => {
-      if (api && typeof (api as { scrollNext: Function }).scrollNext === "function") {
-        (api as { scrollNext: () => void }).scrollNext()
+      if (!isDragging) {
+        setCurrentSlide((prev) => (prev + 1) % testimonials.length)
       }
     }, 5000); // 5 seconds
     
     return () => clearInterval(interval);
-  }, [api])
+  }, [isDragging])
 
   // Set mounted state and update shadow animation
   useEffect(() => {
@@ -43,16 +38,54 @@ export default function TemoignagesScreen() {
     return () => clearInterval(interval);
   }, []);
 
-  // Track current slide for animations
-  useEffect(() => {
-    if (api && typeof (api as { on: Function }).on === "function") {
-      const onSelect = () => {
-        setCurrentSlide((api as { selectedScrollSnap: () => number }).selectedScrollSnap())
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % testimonials.length)
+  }
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }
+
+  // Touch/Mouse event handlers
+  const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
+    setIsDragging(true)
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+    setStartPos(clientX)
+    const containerWidth = (e.currentTarget as HTMLElement).offsetWidth
+    setCurrentTranslate(-currentSlide * containerWidth)
+    setPrevTranslate(-currentSlide * containerWidth)
+  }
+
+  const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDragging) return
+    e.preventDefault()
+    
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+    const diff = clientX - startPos
+    setCurrentTranslate(prevTranslate + diff)
+  }
+
+  const handleEnd = () => {
+    if (!isDragging) return
+    setIsDragging(false)
+    
+    const threshold = 50 // Minimum distance to trigger slide change
+    const diff = currentTranslate - prevTranslate
+    
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        // Swiped right (previous slide)
+        prevSlide()
+      } else {
+        // Swiped left (next slide)
+        nextSlide()
       }
-      (api as { on: (event: string, cb: () => void) => void }).on('select', onSelect)
-      return () => (api as { off: (event: string, cb: () => void) => void }).off('select', onSelect)
     }
-  }, [api])
+    
+    // Reset for next interaction
+    setCurrentTranslate(-currentSlide * (document.querySelector('[data-carousel]') as HTMLElement)?.offsetWidth || 0)
+    setPrevTranslate(-currentSlide * (document.querySelector('[data-carousel]') as HTMLElement)?.offsetWidth || 0)
+  }
 
   const testimonials = [
     {
@@ -73,65 +106,75 @@ export default function TemoignagesScreen() {
   ]
 
   return (
-    <div className="flex flex-col items-center w-full h-screen snap-start pt-0 pb-6 sm:pb-10 md:pb-16 lg:pb-20 box-border" data-screen="temoignages">
-      <div className="max-w-6xl xl:max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 w-full h-full flex flex-col items-center justify-center pt-8 sm:pt-12 md:pt-16 lg:pt-20">
-        
-        <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 md:gap-10 lg:gap-12 w-full items-center justify-center">
-          {/* Video Section */}
-          <div className="w-full lg:w-1/2 flex items-center justify-center">
-            <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-none aspect-video rounded-lg sm:rounded-xl overflow-hidden" style={{ boxShadow: `0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)}, 0 4px 6px -1px ${getDynamicShadow(hasMounted, shadowTime)}` }}>
-              <iframe
-                src="https://www.youtube.com/embed/ZAmK31x3qDs"
-                title="Témoignage Spire Conseil"
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
+    <div className="flex items-center justify-center w-full h-screen snap-start" data-screen="temoignages">
+      <div className="flex flex-col sm:flex-row-reverse sm:justify-stretch items-center justify-center gap-8 lg:gap-12 sm:max-w-6xl px-4 sm:px-6 lg:px-8">
+      
+        {/* Video Section */}
+          <div className="aspect-video w-full max-w-sm sm:min-w-[300px] lg:min-w-[500px] z-10 rounded-lg overflow-hidden" style={{ boxShadow: `0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)}, 0 4px 6px -1px ${getDynamicShadow(hasMounted, shadowTime)}` }}>
+          <iframe
+            src="https://www.youtube.com/embed/ZAmK31x3qDs"
+            title="Témoignage Spire Conseil"
+            className="size-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
           
-          {/* Carousel Section */}
-          <div className="w-full lg:w-1/2 flex items-center justify-center px-2 sm:px-4">
-            <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-none">
-              <h1 className="text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl font-bold text-[#012073] mb-3 sm:mb-4 text-center px-2 mt-4 sm:mt-6 md:mt-8">
-                Ils nous font confiance
-              </h1>
-              <Carousel
-                opts={{
-                  align: "start",
-                  loop: true,
-                }}
-                setApi={setApi}
-                className="w-full"
-              >
-                <CarouselContent className="overflow-visible -ml-2 sm:-ml-4">
-                  {testimonials.map((testimonial, index) => (
-                    <CarouselItem key={index} className="pl-2 sm:pl-4 pr-2 sm:pr-4">
-                      <div 
-                        className={`bg-white p-4 sm:p-5 md:p-6 lg:p-8 rounded-lg sm:rounded-xl min-h-[280px] sm:min-h-[320px] md:min-h-[360px] lg:min-h-[400px] flex flex-col justify-between transition-all duration-700 ease-in-out ${
-                          currentSlide === index 
-                            ? 'opacity-100 scale-100' 
-                            : 'opacity-60 scale-95'
-                        }`}
-                      >
-                        <div className="flex-grow">
-                          <blockquote className="text-xs sm:text-xs md:text-sm lg:text-base xl:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6 flex-grow text-left italic">
-                            "{testimonial.quote}"
-                          </blockquote>
-                        </div>
-                        <div className="border-t border-gray-200 pt-3 sm:pt-4 md:pt-5">
-                          <h4 className="font-bold text-[#012073] text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl text-left mb-1">
-                            {testimonial.author}
-                          </h4>
-                          <p className="text-gray-600 text-xs sm:text-xs md:text-sm lg:text-base xl:text-lg text-left font-medium">
-                            {testimonial.position}
-                          </p>
-                        </div>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
+        {/* Carousel Section */}
+        <div className="max-w-sm sm:max-w-none h-[40vh] sm:h-[60vh] px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white overflow-hidden">
+          <h1 className="text-lg lg:text-4xl font-bold text-[#012073] text-center sm:text-left leading-tight">
+            Ils nous font confiance
+          </h1>
+          {/* Custom Carousel with Swipe */}
+          <div className="relative w-full overflow-hidden">
+            {/* Carousel Container */}
+            <div 
+              data-carousel
+              className={`flex ${isDragging ? '' : 'transition-transform duration-700 ease-in-out'} cursor-grab active:cursor-grabbing select-none`}
+              style={{ 
+                transform: isDragging 
+                  ? `translateX(${currentTranslate}px)` 
+                  : `translateX(-${currentSlide * 100}%)` 
+              }}
+              onMouseDown={handleStart}
+              onMouseMove={handleMove}
+              onMouseUp={handleEnd}
+              onMouseLeave={handleEnd}
+              onTouchStart={handleStart}
+              onTouchMove={handleMove}
+              onTouchEnd={handleEnd}
+            >
+              {testimonials.map((testimonial, index) => (
+                <div 
+                  key={index}
+                  className="flex flex-col justify-between w-full flex-shrink-0 p-2 pointer-events-none"
+                >
+                  <blockquote className="text-xs lg:text-sm text-gray-700 leading-relaxed mb-1 text-left italic line-clamp-4 lg:line-clamp-none">
+                   {testimonial.quote}
+                  </blockquote>
+                  <div className="border-t border-gray-200 pt-3 lg:pt-5">
+                    <h4 className="font-bold text-[#012073] text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl text-left mb-1">
+                      {testimonial.author}
+                    </h4>
+                    <p className="text-gray-600 text-xs lg:text-sm text-left font-medium">
+                      {testimonial.position}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            {/* Navigation Dots */}
+            <div className="flex justify-center mt-4 space-x-2">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    currentSlide === index ? 'bg-[#012073] w-6' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </div>
