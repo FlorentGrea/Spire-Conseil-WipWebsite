@@ -28,13 +28,19 @@ export default function HeadLine() {
   const scrollToSection = (sectionIndex: number) => {
     let targetSection;
     
-    if (sectionIndex === 1) {
-      // For "Nos Offres", scroll to the first offer screen
+    // Map navigation indices to actual screen elements
+    if (sectionIndex === 0) {
+      targetSection = document.querySelector('[data-screen="home"]');
+    } else if (sectionIndex === 1) {
       targetSection = document.querySelector('[data-screen="offers0"]');
-    } else {
-      // For other sections, use the original logic
-      const sections = document.querySelectorAll('[class*="snap-start"]');
-      targetSection = sections[sectionIndex];
+    } else if (sectionIndex === 2) {
+      targetSection = document.querySelector('[data-screen="subsidiarite"]');
+    } else if (sectionIndex === 3) {
+      targetSection = document.querySelector('[data-screen="temoignages"]');
+    } else if (sectionIndex === 4) {
+      targetSection = document.querySelector('[data-screen="notre-equipe"]');
+    } else if (sectionIndex === 5) {
+      targetSection = document.querySelector('[data-screen="contact"]');
     }
     
     if (targetSection) {
@@ -75,8 +81,23 @@ export default function HeadLine() {
             const screenIndex = screens.findIndex(screen => screen === entry.target);
             
             if (screenIndex !== -1 && screenIndex !== current) {
-              // If it's an offer screen (index 1-4), set current to 1 (Nos Offres)
-              const newCurrent = screenIndex >= 1 && screenIndex <= 4 ? 1 : screenIndex;
+              // Map screen indices to navigation indices
+              let newCurrent;
+              if (screenIndex === 0) {
+                newCurrent = 0; // "Accueil"
+              } else if (screenIndex >= 1 && screenIndex <= 4) {
+                newCurrent = 1; // "Nos Offres" (any offer screen)
+              } else if (screenIndex === 5) {
+                newCurrent = 2; // "Notre Méthode"
+              } else if (screenIndex === 6) {
+                newCurrent = 3; // "Témoignages"
+              } else if (screenIndex === 7) {
+                newCurrent = 4; // "Notre Équipe"
+              } else if (screenIndex === 8) {
+                newCurrent = 5; // "Nous Contacter"
+              } else {
+                newCurrent = screenIndex;
+              }
               
               if (newCurrent !== current) {
                 setPrev(current);

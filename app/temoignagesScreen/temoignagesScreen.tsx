@@ -35,6 +35,19 @@ export default function TemoignagesScreen() {
       setShadowTime(Date.now());
     }, 16); // ~60fps
     
+    // Initialize shadow visibility on mount
+    setTimeout(() => {
+      const scrollContainers = document.querySelectorAll('[data-carousel] > div > div');
+      scrollContainers.forEach((container, index) => {
+        const element = container as HTMLElement;
+        const shadow = element.nextElementSibling as HTMLElement;
+        if (shadow && element) {
+          const isScrollable = element.scrollHeight > element.clientHeight;
+          shadow.style.opacity = isScrollable ? '1' : '0';
+        }
+      });
+    }, 100);
+    
     return () => clearInterval(interval);
   }, []);
 
@@ -121,61 +134,102 @@ export default function TemoignagesScreen() {
         </div>
           
         {/* Carousel Section */}
-        <div className="max-w-sm sm:max-w-none h-[40vh] sm:h-[60vh] px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white overflow-hidden">
-          <h1 className="text-lg lg:text-4xl font-bold text-[#012073] text-center sm:text-left leading-tight">
-            Ils nous font confiance
-          </h1>
-          {/* Custom Carousel with Swipe */}
-          <div className="relative w-full overflow-hidden">
-            {/* Carousel Container */}
-            <div 
-              data-carousel
-              className={`flex ${isDragging ? '' : 'transition-transform duration-700 ease-in-out'} cursor-grab active:cursor-grabbing select-none`}
-              style={{ 
-                transform: isDragging 
-                  ? `translateX(${currentTranslate}px)` 
-                  : `translateX(-${currentSlide * 100}%)` 
-              }}
-              onMouseDown={handleStart}
-              onMouseMove={handleMove}
-              onMouseUp={handleEnd}
-              onMouseLeave={handleEnd}
-              onTouchStart={handleStart}
-              onTouchMove={handleMove}
-              onTouchEnd={handleEnd}
-            >
-              {testimonials.map((testimonial, index) => (
+        <div className="max-w-sm sm:max-w-none flex flex-col">
+          {/* Title on top of the box */}
+          <div className="w-full h-fit p-2 z-10 bg-[#012073] mb-4">
+            <h1 className="text-lg lg:text-4xl font-bold text-white text-center sm:text-left leading-tight">
+              Ils nous font confiance
+            </h1>
+          </div>
+          
+          <div className="flex-grow h-[30vh] sm:h-[40vh] px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white flex flex-col">
+            {/* Carousel Container - takes remaining space */}
+            <div className="flex-1 overflow-hidden flex flex-col">
+              <div className="flex-1 overflow-hidden relative">
                 <div 
-                  key={index}
-                  className="flex flex-col justify-between w-full flex-shrink-0 p-2 pointer-events-none"
+                  data-carousel
+                  className={`flex h-full ${isDragging ? '' : 'transition-transform duration-700 ease-in-out'} cursor-grab active:cursor-grabbing select-none`}
+                  style={{ 
+                    transform: isDragging 
+                      ? `translateX(${currentTranslate}px)` 
+                      : `translateX(-${currentSlide * 100}%)` 
+                  }}
+                  onMouseDown={handleStart}
+                  onMouseMove={handleMove}
+                  onMouseUp={handleEnd}
+                  onMouseLeave={handleEnd}
+                  onTouchStart={handleStart}
+                  onTouchMove={handleMove}
+                  onTouchEnd={handleEnd}
                 >
-                  <blockquote className="text-xs lg:text-sm text-gray-700 leading-relaxed mb-1 text-left italic line-clamp-4 lg:line-clamp-none">
-                   {testimonial.quote}
-                  </blockquote>
-                  <div className="border-t border-gray-200 pt-3 lg:pt-5">
-                    <h4 className="font-bold text-[#012073] text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl text-left mb-1">
-                      {testimonial.author}
-                    </h4>
-                    <p className="text-gray-600 text-xs lg:text-sm text-left font-medium">
-                      {testimonial.position}
-                    </p>
-                  </div>
+                  {testimonials.map((testimonial, index) => (
+                    <div 
+                      key={index}
+                      className="w-full flex-shrink-0 p-1 relative"
+                    >
+                      <div 
+                        className={`h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent ${isDragging ? 'pointer-events-none' : 'pointer-events-auto'}`}
+                        onScroll={(e) => {
+                          const element = e.currentTarget;
+                          const shadow = element.nextElementSibling as HTMLElement;
+                          if (shadow) {
+                            const isScrollable = element.scrollHeight > element.clientHeight;
+                            const isScrolledToBottom = element.scrollTop + element.clientHeight >= element.scrollHeight - 1;
+                            shadow.style.opacity = (isScrollable && !isScrolledToBottom) ? '1' : '0';
+                          }
+                        }}
+                      >
+                        <blockquote className="text-xs lg:text-sm text-gray-700 leading-relaxed text-left italic">
+                         {testimonial.quote}
+                        </blockquote>
+                      </div>
+                      {/* Shadow gradient at bottom when content overflows */}
+                      <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none transition-opacity duration-300" 
+                           style={{
+                             opacity: testimonial.quote.length > 300 ? 1 : 0
+                           }}>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+              
+              {/* Bottom section: Author & Position with sliding animation */}
+              <div className="border-t border-gray-200 pt-1 lg:pt-5 mt-auto overflow-hidden">
+                <div 
+                  className={`flex ${isDragging ? '' : 'transition-transform duration-700 ease-in-out'}`}
+                  style={{ 
+                    transform: isDragging 
+                      ? `translateX(${currentTranslate}px)` 
+                      : `translateX(-${currentSlide * 100}%)` 
+                  }}
+                >
+                  {testimonials.map((testimonial, index) => (
+                    <div key={index} className="w-full flex-shrink-0">
+                      <h4 className="font-bold text-[#012073] text-xs md:text-sm lg:text-xl xl:text-2xl text-left">
+                        {testimonial.author}
+                      </h4>
+                      <p className="text-gray-600 text-xs lg:text-sm text-left font-medium">
+                        {testimonial.position}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-            
-            {/* Navigation Dots */}
-            <div className="flex justify-center mt-4 space-x-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    currentSlide === index ? 'bg-[#012073] w-6' : 'bg-gray-300'
-                  }`}
-                />
-              ))}
-            </div>
+          </div>
+          
+          {/* Navigation Dots - Outside and under the box */}
+          <div className="flex justify-center mt-4 space-x-2">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  currentSlide === index ? 'bg-[#012073] w-6' : 'bg-gray-300'
+                }`}
+              />
+            ))}
           </div>
         </div>
       </div>

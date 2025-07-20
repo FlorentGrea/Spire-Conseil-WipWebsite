@@ -294,8 +294,8 @@ export default function NotreEquipeScreen() {
   }, []);
 
   // Responsive hexagon size for all hexagons
-  const hexSize = isMd ? 100 : 70;
-  const svgSize = isMd ? 220 : 180;
+  const hexSize = isMd ? 100 : 60;
+  const svgSize = isMd ? 220 : 160;
 
 
 
@@ -307,15 +307,12 @@ export default function NotreEquipeScreen() {
       className="flex items-center justify-center w-full h-screen snap-start" data-screen="notre-equipe"
     >
       <div className="flex flex-col items-center justify-center gap-2 lg:gap-12 max-w-6xl px-4 sm:px-6 lg:px-8">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#012073] mb-6 sm:mb-8 mt-8 sm:mt-12 md:mt-16 text-center">
-          Les fondateurs
-        </h1>
         
-        <div className="relative w-full max-w-6xl" style={{ minHeight: "400px" }}>
+        <div className="relative w-full max-w-6xl">
         {textContent.map((content, index) => (
           <div 
             key={index}
-            className={`flex flex-col-reverse sm:flex-row gap-8 lg:gap-12 w-full max-w-6xl items-center justify-center transition-all duration-300 ease-in-out ${isLayoutSwapped ? 'lg:flex-row-reverse' : ''}`}
+            className={`flex flex-col-reverse sm:flex-row gap-2 sm:gap-8 lg:gap-12 w-full max-w-6xl items-center justify-center transition-all duration-300 ease-in-out ${isLayoutSwapped ? 'lg:flex-row-reverse' : ''}`}
             style={{
               position: activeHexagon === index ? "relative" : "absolute",
               top: activeHexagon === index ? "auto" : "0",
@@ -335,10 +332,14 @@ export default function NotreEquipeScreen() {
                 transition: "transform 0.3s ease-in-out"
               }}
             >
-              <div className="w-full border-2 border-[#012073] rounded-lg p-4 bg-white">
-                <h2 className="text-lg lg:text-4xl font-bold text-[#012073] mb-4 text-center lg:text-left leading-tight">
+              {/* Title on top of the box */}
+              <div className="w-full h-fit p-2 z-10 bg-[#012073] mb-4">
+                <h2 className="text-lg lg:text-4xl font-bold text-white text-center lg:text-left leading-tight">
                   {content.title}
                 </h2>
+              </div>
+              
+              <div className="w-full border-2 border-[#012073] rounded-lg p-4 bg-white">
                 <div className="text-xs lg:text-xl text-gray-700 leading-relaxed space-y-4 sm:space-y-6 text-center lg:text-left">
                   <p>
                     {content.description}

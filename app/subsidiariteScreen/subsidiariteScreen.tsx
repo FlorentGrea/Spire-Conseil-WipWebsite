@@ -298,10 +298,15 @@ export default function SubsidiariteScreen() {
         </div>
 
         {/* Content Section */}
-        <div className="flex flex-col w-full max-w-sm sm:max-w-none h-[30vh] sm:h-fit px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white flex-grow">
-            <h2 key={`title-${activeHex || 'default'}`} className={`text-lg lg:text-4xl font-bold text-[#012073] mb-4 leading-tight text-center sm:text-left transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
+        <div className="flex flex-col w-full max-w-sm sm:max-w-none flex-grow">
+          {/* Title on top of the box */}
+          <div className="w-full h-fit p-2 z-10 bg-[#012073] mb-4">
+            <h2 key={`title-${activeHex || 'default'}`} className={`text-lg lg:text-4xl font-bold text-white leading-tight text-center sm:text-left transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
               {currentContent.title}
             </h2>
+          </div>
+          
+          <div className="h-[30vh] sm:h-fit px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white flex-grow">
             <p key={`description-${activeHex || 'default'}`} className={`text-xs lg:text-xl text-gray-700 leading-relaxed text-center sm:text-left transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
               {!activeHex ? (
                 <span dangerouslySetInnerHTML={{ __html: currentContent.description }} />
@@ -309,6 +314,7 @@ export default function SubsidiariteScreen() {
                 currentContent.description
               )}
             </p>
+          </div>
         </div>
       </div>
     </div>
