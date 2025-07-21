@@ -1,9 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useMousePosition } from "../../utils/mouseCoordinates";
-import { getDynamicShadow } from "../../utils/dynamicShadow";
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsTrigger, TabsList } from "@/components/ui/tabs";
 
@@ -83,13 +80,13 @@ export default function OffersScreen({ lineRightPosition }: { lineRightPosition?
   };
 
   return (
-    <div className="flex items-center justify-center w-full h-screen snap-start" data-screen="offers">
-      <div className="flex flex-col items-center justify-center gap-4 lg:gap-12 sm:max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div className="screen-container" data-screen="offers">
+      <div className="screen-content flex-col">
         <div 
-          className="w-full  max-w-sm sm:w-[40vw] h-fit p-2 z-10 bg-[#012073] sm:relative sm:self-start"
+          className="title-container title-container-v3 w-full max-w-sm sm:w-[40vw] sm:relative sm:self-start"
           style={calculateLeftOffset()}
         >
-          <h1 className="text-lg lg:text-4xl font-bold text-white text-center sm:text-left leading-tight">
+          <h1 className="title-text">
             Nos offres
           </h1>
         </div>
@@ -106,7 +103,7 @@ export default function OffersScreen({ lineRightPosition }: { lineRightPosition?
               >
                 <Image src={offer.image} alt={offer.title} fill className="object-cover object-center" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent z-10" />
-                <div className="flex justify-center items-end h-full p-2 z-20">
+                <div className="flex justify-center items-end h-full p-2 lg:p-4 z-20">
                   <h1 className="text-sm md:text-base lg:text-lg font-bold mb-2 text-white z-10">
                     {offer.title}
                   </h1>
@@ -124,7 +121,7 @@ export default function OffersScreen({ lineRightPosition }: { lineRightPosition?
           onClick={() => setSelectedOffer(null)}
         >
           <div 
-            className="bg-white rounded-xl shadow-xl w-[90vw] h-[90vh] relative overflow-hidden"
+            className="bg-white rounded-xl shadow-xl w-[90vw] h-[90vh] max-w-6xl relative overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
 
@@ -159,8 +156,112 @@ export default function OffersScreen({ lineRightPosition }: { lineRightPosition?
                 <TabsContent value="useCase" className="text-gray-700 leading-relaxed">
                   {offersData[selectedOffer].useCase}
                 </TabsContent>
-                <TabsContent value="method" className="text-gray-700 leading-relaxed">
-                  {offersData[selectedOffer].method}
+                <TabsContent value="method" className="text-gray-700 leading-relaxed w-full overflow-y-auto max-h-96">
+                  <div className="flex flex-col justify-center space-y-2">
+                    {/* Method Step 1 */}
+                    <div className="flex flex-row items-center relative">
+                      <div className="w-8 h-8 bg-[#012073] rounded-full flex items-center justify-center mr-2">
+                        <span className="text-white font-bold text-sm">01</span>
+                      </div>
+                      <p className="text-sm md:text-base font-bold">Audit de 6 familles de dysfonctionnements</p>
+                    </div>
+                    
+                    {/* Small text for Step 1 */}
+                    <div className="flex gap-4">
+                      <div className="w-0.5 bg-[#012073] ml-3 mr-4 self-stretch"></div>
+                      <div className="flex-1">
+                        <ul className="text-xs md:text-sm space-y-1 text-gray-600">
+                          <li>• Condition de travail</li>
+                          <li>• Organisation du travail</li>
+                          <li>• Gestion du temps</li>
+                          <li>• Communication, coordination, coopération</li>
+                          <li>• Formation intégrée</li>
+                          <li>• Mise en œuvre stratégique</li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    {/* Method Step 2 */}
+                    <div className="flex flex-row items-center relative">
+                      <div className="w-8 h-8 bg-[#012073] rounded-full flex items-center justify-center mr-2">
+                        <span className="text-white font-bold text-sm">02</span>
+                      </div>
+                      <p className="text-center text-sm md:text-base font-bold">Analyse des indicateurs</p>
+                    </div>
+                    
+                    {/* Small text for Step 2 */}
+                    <div className="flex gap-4">
+                      <div className="w-0.5 bg-[#012073] ml-3 mr-4 self-stretch"></div>
+                      <div className="flex-1">
+                        <ul className="text-xs md:text-sm space-y-1 text-gray-600">
+                          <li>• Absentéisme</li>
+                          <li>• Accidents du travail</li>
+                          <li>• Rotation du personnel</li>
+                          <li>• Défauts de qualité</li>
+                          <li>• Écarts de productivité directe</li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    {/* Method Step 3 */}
+                    <div className="flex flex-row items-center relative">
+                      <div className="w-8 h-8 bg-[#012073] rounded-full flex items-center justify-center mr-2">
+                        <span className="text-white font-bold text-sm">03</span>
+                      </div>
+                      <p className="text-center text-sm md:text-base font-bold">Analyse des impacts</p>
+                    </div>
+                    
+                    {/* Small text for Step 3 */}
+                    <div className="flex gap-4">
+                      <div className="w-0.5 bg-[#012073] ml-3 mr-4 self-stretch"></div>
+                      <div className="flex-1">
+                        <ul className="text-xs md:text-sm space-y-1 text-gray-600">
+                          <li>• Sursalaires</li>
+                          <li>• Surtemps</li>
+                          <li>• Surconsommation</li>
+                          <li>• Non-production</li>
+                          <li>• Non-création de potentiels</li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    {/* Method Step 4 */}
+                    <div className="flex flex-row items-center relative">
+                      <div className="w-8 h-8 bg-[#012073] rounded-full flex items-center justify-center mr-2">
+                        <span className="text-white font-bold text-sm">04</span>
+                      </div>
+                      <p className="text-center text-sm md:text-base font-bold">Mesure financière et extra-financière</p>
+                    </div>
+                    
+                    {/* Small text for Step 4 */}
+                    <div className="flex gap-4">
+                      <div className="w-0.5 bg-[#012073] ml-3 mr-4 self-stretch"></div>
+                      <div className="flex-1">
+                        <ul className="text-xs md:text-sm space-y-1 text-gray-600">
+                          <li>• Prix et coût unitaires des composants de régulation</li>
+                          <li>• Effet extra-financiers: sens au travail, relation clients, marque employeur, relation partenaires...</li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    {/* Method Step 5 */}
+                    <div className="flex flex-row items-center relative">
+                      <div className="w-8 h-8 bg-[#012073] rounded-full flex items-center justify-center mr-2">
+                        <span className="text-white font-bold text-sm">05</span>
+                      </div>
+                      <p className="text-center text-sm md:text-base font-bold">Leviers managériaux</p>
+                    </div>
+                    
+                    {/* Small text for Step 5 */}
+                    <div className="flex gap-4 ml-12">
+                      <div className="flex-1">
+                        <ul className="text-xs md:text-sm space-y-1 text-gray-600">
+                          <li>• Plan d'action managérial pour agir sur la cause des coûts cachés</li>
+                          <li>• Mise en œuvre d'un management subsidiaire au bénéfice de la compression des coûts cachés</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </TabsContent>
               </Tabs>
               

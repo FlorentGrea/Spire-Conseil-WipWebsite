@@ -15,7 +15,7 @@ export default function HeadLine() {
   const [direction, setDirection] = useState<'up' | 'down'>('up');
   const [isNavigating, setIsNavigating] = useState(false);
 
-  const screenNames = ["Accueil", "Nos Offres", "Notre Méthode", "Témoignages", "Notre Équipe", "Nous Contacter"];
+  const screenNames = ["Accueil", "Nos Offres", "Notre Méthode", "Témoignages", "Qui sommes-nous?", "Nous Contacter", "Informations"];
 
   const handleLogoClick = () => {
     if (isHomePage) {
@@ -41,6 +41,8 @@ export default function HeadLine() {
       targetSection = document.querySelector('[data-screen="notre-equipe"]');
     } else if (sectionIndex === 5) {
       targetSection = document.querySelector('[data-screen="contact"]');
+    } else if (sectionIndex === 6) {
+      targetSection = document.querySelector('[data-screen="footer"]');
     }
     
     if (targetSection) {
@@ -72,6 +74,7 @@ export default function HeadLine() {
       document.querySelector('[data-screen="temoignages"]'),
       document.querySelector('[data-screen="notre-equipe"]'),
       document.querySelector('[data-screen="contact"]'),
+      document.querySelector('[data-screen="footer"]'),
     ];
 
     const observer = new IntersectionObserver(
@@ -92,9 +95,11 @@ export default function HeadLine() {
               } else if (screenIndex === 6) {
                 newCurrent = 3; // "Témoignages"
               } else if (screenIndex === 7) {
-                newCurrent = 4; // "Notre Équipe"
+                newCurrent = 4; // "Qui sommes-nous?"
               } else if (screenIndex === 8) {
                 newCurrent = 5; // "Nous Contacter"
+              } else if (screenIndex === 9) {
+                newCurrent = 6; // "Informations" (footer)
               } else {
                 newCurrent = screenIndex;
               }
@@ -217,6 +222,7 @@ export default function HeadLine() {
                 height="16" 
                 viewBox="0 0 20 20" 
                 className="text-[#012073] mr-2 md:mr-3 lg:mr-5 w-5 h-5 md:w-5 md:h-5 lg:w-7 lg:h-7"
+                style={{ filter: 'drop-shadow(3px 3px 3px rgba(0,0,0,0.8))' }}
               >
                 <line x1="2" y1="4" x2="18" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>

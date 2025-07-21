@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useMousePosition } from "../../utils/mouseCoordinates"
-import { getDynamicShadow } from "../../utils/dynamicShadow"
+import { getDynamicShadow } from "../utils/dynamicShadow"
 
 
 export default function TemoignagesScreen() {
@@ -13,7 +12,6 @@ export default function TemoignagesScreen() {
   const [startPos, setStartPos] = useState(0)
   const [currentTranslate, setCurrentTranslate] = useState(0)
   const [prevTranslate, setPrevTranslate] = useState(0)
-  const mousePosition = useMousePosition()
 
   // Auto-advance carousel every 5 seconds
   useEffect(() => {
@@ -119,8 +117,8 @@ export default function TemoignagesScreen() {
   ]
 
   return (
-    <div className="flex items-center justify-center w-full h-screen snap-start" data-screen="temoignages">
-      <div className="flex flex-col sm:flex-row-reverse sm:justify-stretch items-center justify-center gap-8 lg:gap-12 sm:max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div className="screen-container" data-screen="temoignages">
+      <div className="screen-content flex-col sm:flex-row-reverse">
       
         {/* Video Section */}
           <div className="aspect-video w-full max-w-sm sm:min-w-[300px] lg:min-w-[500px] z-10 rounded-lg overflow-hidden" style={{ boxShadow: `0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)}, 0 4px 6px -1px ${getDynamicShadow(hasMounted, shadowTime)}` }}>
@@ -136,13 +134,13 @@ export default function TemoignagesScreen() {
         {/* Carousel Section */}
         <div className="max-w-sm sm:max-w-none flex flex-col">
           {/* Title on top of the box */}
-          <div className="w-full h-fit p-2 z-10 bg-[#012073] mb-4">
-            <h1 className="text-lg lg:text-4xl font-bold text-white text-center sm:text-left leading-tight">
+          <div className="title-container title-container-v3">
+            <h1 className="title-text">
               Ils nous font confiance
             </h1>
           </div>
           
-          <div className="flex-grow h-[30vh] sm:h-[40vh] px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white flex flex-col">
+          <div className="content-box content-box-v4 flex-grow h-[30vh] sm:h-[40vh] px-2 z-10 flex flex-col">
             {/* Carousel Container - takes remaining space */}
             <div className="flex-1 overflow-hidden flex flex-col">
               <div className="flex-1 overflow-hidden relative">

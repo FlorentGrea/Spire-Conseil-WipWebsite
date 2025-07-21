@@ -123,6 +123,7 @@ export default function Alveoles() {
           height={svgSize}
           viewBox={`-${svgSize / 2} -${svgSize / 2} ${svgSize} ${svgSize}`}
           className="drop-shadow-lg"
+          style={{ filter: 'drop-shadow(3px 3px 3px rgba(0,0,0,0.8))' }}
         >
           {/* Surrounding hexagons */}
           {alveoles.map((alveole, index) => {

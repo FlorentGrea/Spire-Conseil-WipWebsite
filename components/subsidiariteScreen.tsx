@@ -6,14 +6,10 @@ function Hexagon({ image, onClick, noEffects, isSelected }: { image: string, onC
   // Flat-topped hexagon points (horizontal orientation)
   const hexPoints = "43,25 43,-25 0,-50 -43,-25 -43,25 0,50";
   const [hover, setHover] = useState(false);
-  const [isSmall, setIsSmall] = useState(false);
-  const [isSm, setIsSm] = useState(false);
   const [isLg, setIsLg] = useState(false);
   
   useEffect(() => {
     const checkSize = () => {
-      setIsSmall(window.innerWidth < 640);
-      setIsSm(window.innerWidth >= 640);
       setIsLg(window.innerWidth >= 1024);
     };
     checkSize();
@@ -22,44 +18,50 @@ function Hexagon({ image, onClick, noEffects, isSelected }: { image: string, onC
   }, []);
   
   const size = isLg ? 120 : 70;
-  const fillColor = isSelected ? "#ecb529" : "#012073";
+  const fillColor = "#012073";
   
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="-60 -60 120 120"
-      style={{ cursor: noEffects ? 'default' : 'pointer' }}
-      onMouseEnter={noEffects ? undefined : () => setHover(true)}
-      onMouseLeave={noEffects ? undefined : () => setHover(false)}
-      onClick={onClick}
-    >
-      <defs>
-        <clipPath id={image.replace(/\W/g, "") + "-clip"}>
-          <polygon points={hexPoints} />
-        </clipPath>
-        <filter id={image.replace(/\W/g, "") + "-shadow"}>
-          <feDropShadow dx="2" dy="4" stdDeviation="6" floodColor="rgba(0,0,0,0.25)"/>
-          <feDropShadow dx="1" dy="2" stdDeviation="3" floodColor="rgba(0,0,0,0.15)"/>
-        </filter>
-      </defs>
-      <polygon 
-        points={hexPoints} 
-        fill={fillColor} 
-        stroke={fillColor} 
-        strokeWidth="4"
-        filter={noEffects ? 'none' : hover ? 'drop-shadow(0 2px 4px #f7e400dd)' : 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'}
-      />
-      <image
-        href={`/${image}`}
-        x={-50}
-        y={-50}
-        width={100}
-        height={100}
-        clipPath={`url(#${image.replace(/\W/g, "")}-clip)`}
-        preserveAspectRatio="xMidYMid slice"
-      />
-    </svg>
+    <div className={isSelected ? 'hexagon-selected' : ''}>
+      <svg
+        width={size}
+        height={size}
+        viewBox="-60 -60 120 120"
+        style={{ 
+          cursor: noEffects ? 'default' : 'pointer',
+          filter: 'drop-shadow(3px 3px 3px rgba(0,0,0,0.8))'
+        }}
+        onMouseEnter={noEffects ? undefined : () => setHover(true)}
+        onMouseLeave={noEffects ? undefined : () => setHover(false)}
+        onClick={onClick}
+      >
+                <defs>
+          <clipPath id={image.replace(/\W/g, "") + "-clip"}>
+            <polygon points={hexPoints} />
+          </clipPath>
+          <filter id={image.replace(/\W/g, "") + "-shadow"}>
+            <feDropShadow dx="2" dy="4" stdDeviation="6" floodColor="rgba(0,0,0,0.25)"/>
+            <feDropShadow dx="1" dy="2" stdDeviation="3" floodColor="rgba(0,0,0,0.15)"/>
+          </filter>
+
+        </defs>
+        <polygon 
+          points={hexPoints} 
+          fill={fillColor} 
+          stroke={fillColor} 
+          strokeWidth="4"
+          filter={noEffects ? 'none' : hover ? 'drop-shadow(0 2px 4px #f7e400dd)' : 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'}
+        />
+        <image
+          href={`/${image}`}
+          x={-50}
+          y={-50}
+          width={100}
+          height={100}
+          clipPath={`url(#${image.replace(/\W/g, "")}-clip)`}
+          preserveAspectRatio="xMidYMid slice"
+        />
+      </svg>
+    </div>
   );
 }
 
@@ -69,6 +71,7 @@ export default function SubsidiariteScreen() {
   const [textAnimation, setTextAnimation] = useState<string>('');
   const [gradientRotation, setGradientRotation] = useState<number>(-50);
   const [drawingComplete, setDrawingComplete] = useState(false);
+  const [isManualSelection, setIsManualSelection] = useState(false);
   
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -89,6 +92,40 @@ export default function SubsidiariteScreen() {
 
     return () => observer.disconnect();
   }, []);
+
+  // Dynamic hexagon selection
+  useEffect(() => {
+    if (!isVisible || isManualSelection) return;
+
+    const hexOrder = ['proximite', 'autonomie', 'responsabilite', 'confiance', 'soutien', 'clarte'];
+    
+    const interval = setInterval(() => {
+      setActiveHex(prevHex => {
+        if (!prevHex) return 'proximite';
+        
+        const currentIndex = hexOrder.indexOf(prevHex);
+        const nextIndex = (currentIndex + 1) % hexOrder.length;
+        const nextHex = hexOrder[nextIndex];
+        
+        // Update gradient rotation for the new hexagon
+        const hexPositions = {
+          proximite: -90,
+          autonomie: -30,
+          responsabilite: 30,
+          confiance: 90,
+          soutien: 150,
+          clarte: 210
+        };
+        
+        const targetRotation = hexPositions[nextHex as keyof typeof hexPositions] || -50;
+        setGradientRotation(targetRotation);
+        
+        return nextHex;
+      });
+    }, 3000); // Change every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [isVisible, isManualSelection]);
   
   const hexContent = {
     default: {
@@ -123,6 +160,8 @@ export default function SubsidiariteScreen() {
 
   const handleHexInteraction = (hexKey: string) => {
     setActiveHex(hexKey);
+    setIsManualSelection(true); // Stop automatic cycling when manually clicked
+    
     // Determine slide direction based on hexagon position
     const slideDirection = getSlideDirection(hexKey);
     setTextAnimation(slideDirection);
@@ -171,17 +210,21 @@ export default function SubsidiariteScreen() {
   const currentContent = activeHex ? hexContent[activeHex as keyof typeof hexContent] : hexContent.default;
 
   return (
-    <div className="flex items-center justify-center w-full h-screen snap-start"  data-screen="subsidiarite">
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-8 lg:gap-12 sm:max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div className="screen-container"  data-screen="subsidiarite">
+      <div className="screen-content flex-col sm:flex-row">
           
         {/* C-Shaped Gradient Arrow Section */}
         <div className="flex items-center justify-center relative">
           <div className="relative size-[15rem] lg:size-[20rem] lg:size-[28rem]">
-            <svg className="w-full h-full" viewBox="0 0 100 100">
+            <svg 
+              className="w-full h-full" 
+              viewBox="0 0 100 100"
+              style={{ filter: 'drop-shadow(3px 3px 3px rgba(0,0,0,0.8))' }}
+            >
               <defs>
                 <linearGradient id="arrowGradient" x1="0%" y1="50%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#1e3a8a" />
-                  <stop offset="50%" stopColor="#6b7280" />
+                  <stop offset="0%" stopColor="#012073" />
+                  <stop offset="70%" stopColor="#012073" />
                   <stop offset="100%" stopColor="#fbbf24" />
                 </linearGradient>
               </defs>
@@ -250,7 +293,7 @@ export default function SubsidiariteScreen() {
               <div className={`absolute -top-2 sm:top-0 right-1/8 sm:right-1/7 transform cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('proximite')}>
                 <Hexagon image="proximity.jpg" isSelected={activeHex === 'proximite'} />
                 <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'proximite' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Proximité</span>
+                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'proximite' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Proximité</span>
                 </div>
               </div>
                 
@@ -258,7 +301,7 @@ export default function SubsidiariteScreen() {
               <div className={`absolute top-1/2 -right-5 sm:-right-4 lg:-right-8 transform -translate-y-1/2 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.3s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('autonomie')}>
                 <Hexagon image="autonomy.jpg" isSelected={activeHex === 'autonomie'} />
                 <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'autonomie' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Autonomie</span>
+                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'autonomie' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Autonomie</span>
                 </div>
               </div>
                 
@@ -266,7 +309,7 @@ export default function SubsidiariteScreen() {
               <div className={`absolute -bottom-2 sm:bottom-0 right-1/8 sm:right-1/7 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.6s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('responsabilite')}>
                 <Hexagon image="responsibility.jpg" isSelected={activeHex === 'responsabilite'} />
                 <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'responsabilite' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Responsabilité</span>
+                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'responsabilite' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Responsabilité</span>
                 </div>
               </div>
                 
@@ -274,7 +317,7 @@ export default function SubsidiariteScreen() {
               <div className={`absolute -bottom-2 sm:bottom-0 left-1/8 sm:left-1/7 transform cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.9s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('confiance')}>
                 <Hexagon image="trust.jpg" isSelected={activeHex === 'confiance'} />
                 <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'confiance' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Confiance</span>
+                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'confiance' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Confiance</span>
                 </div>
               </div>
                 
@@ -282,7 +325,7 @@ export default function SubsidiariteScreen() {
               <div className={`absolute top-1/2 -left-5 sm:-left-4 lg:-left-8 transform -translate-y-1/2 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.2s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('soutien')}>
                 <Hexagon image="support.jpg" isSelected={activeHex === 'soutien'} />
                 <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'soutien' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Soutien</span>
+                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'soutien' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Soutien</span>
                 </div>
               </div>
                 
@@ -290,7 +333,7 @@ export default function SubsidiariteScreen() {
               <div className={`absolute -top-2 sm:top-0 left-1/8 sm:left-1/7 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.5s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('clarte')}>
                 <Hexagon image="clarity.jpg" isSelected={activeHex === 'clarte'} />
                 <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'clarte' ? 'bg-[#ecb529] text-[#012073]' : 'bg-[#012073]/90'}`}>Clarté</span>
+                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'clarte' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Clarté</span>
                 </div>
               </div>
             </div>
@@ -300,13 +343,13 @@ export default function SubsidiariteScreen() {
         {/* Content Section */}
         <div className="flex flex-col w-full max-w-sm sm:max-w-none flex-grow">
           {/* Title on top of the box */}
-          <div className="w-full h-fit p-2 z-10 bg-[#012073] mb-4">
-            <h2 key={`title-${activeHex || 'default'}`} className={`text-lg lg:text-4xl font-bold text-white leading-tight text-center sm:text-left transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
+          <div className="title-container title-container-v3">
+            <h2 key={`title-${activeHex || 'default'}`} className={`title-text transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
               {currentContent.title}
             </h2>
           </div>
           
-          <div className="h-[30vh] sm:h-fit px-2 z-10 border-2 border-[#012073] rounded-lg p-4 bg-white flex-grow">
+          <div className="content-box content-box-v3 h-[30vh] sm:h-fit px-2 z-10 flex-grow">
             <p key={`description-${activeHex || 'default'}`} className={`text-xs lg:text-xl text-gray-700 leading-relaxed text-center sm:text-left transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
               {!activeHex ? (
                 <span dangerouslySetInnerHTML={{ __html: currentContent.description }} />

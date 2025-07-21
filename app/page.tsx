@@ -1,17 +1,19 @@
 "use client";
 
 import { useState, useRef } from "react";
-import HomeScreen from "@/app/homeScreen/homeScreen";
-import OffersScreen from "@/app/timelineScreen/offersScreen";
-import SubsidiariteScreen from "@/app/subsidiariteScreen/subsidiariteScreen";
-import TemoignagesScreen from "@/app/temoignagesScreen/temoignagesScreen";
-import NotreEquipeScreen from "@/app/notreEquipeScreen/notreEquipeScreen";
-import ContactScreen from "@/app/contactScreen/contactScreen";
+import HomeScreen from "@/components/homeScreen";
+import OffersScreen from "@/components/offersScreen";
+import SubsidiariteScreen from "@/components/subsidiariteScreen";
+import TemoignagesScreen from "@/components/temoignagesScreen";
+import NotreEquipeScreen from "@/components/notreEquipeScreen";
+import ContactScreen from "@/components/contactScreen";
+import FooterScreen from "@/components/footerScreen";
 import HeadLine from "@/components/headLine";
 
 export default function Home() {
   const homeScreenRef = useRef<{ getLineRightPosition: () => number | null }>(null);
   const [lineRightPosition, setLineRightPosition] = useState<number | null>(null);
+  const [currentLandscape, setCurrentLandscape] = useState<number | null>(1);
 
   // Function to update line position from HomeScreen
   const handleLinePositionUpdate = () => {
@@ -22,7 +24,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory relative">
+    <div className="h-screen w-full overflow-y-scroll overflow-x-hidden relative">
       <HeadLine />
       <HomeScreen ref={homeScreenRef} onLinePositionChange={handleLinePositionUpdate} />
       <OffersScreen lineRightPosition={lineRightPosition} />
@@ -30,6 +32,7 @@ export default function Home() {
       <TemoignagesScreen />
       <NotreEquipeScreen />
       <ContactScreen />
+      <FooterScreen />
     </div>
   );
 }
