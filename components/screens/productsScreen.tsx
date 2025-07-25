@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 const products = [
     {
         keyWord: "Parcours",
+        image: "/parcours.jpg",
         title: "Vos transitions dans toutes ses dimensions managériales",
         description: "Pour accompagner la croissance ou permettre le maintien de l’activité nous structurons ou créons avec vous les organes de gouvernances, les modes de coopération et les relations.",
         useCase: "Dans le secteur de l’agriculture, une entreprise a grandi en fonction de l’activité et de ses performances.<br /> Il est devenu indispensable de repenser les organes de gouvernance, de mettre en place un CODIR, d’avoir un référentiel commun des attendus du management et de faire monter les cadres en compétence managériale.",
@@ -15,6 +16,7 @@ const products = [
     },
     {
         keyWord: "Viser",
+        image: "/audit.jpg",
         title: "Révéler les gains gâchés du management",
         description: "Pour augmenter vos gains, identifiez et limitez vos dysfonctionnements managériaux :<br />- réunions trop nombreuses ou inefficaces<br />- aller-retour dans la chaine décisionnelle<br />- des managers occupés par des tâches dévolues à leur N-1<br />- des défaillances dans les relations entre collaborateurs et inter-services… <br />Gagnez en sérénité et efficacité !",
         useCase: "Dans le secteur médico-social, le directeur nous a demandé d’identifier les causes d’un taux d’absentéisme très élevé.<br /> Résultat, 60% de ses causes sont lié à des dysfonctionnements managériaux absentéisme, gestion des horaires relations au sein des équipes et manque de compétences sur l’utilisation du matériel.<br /> Lorsque le management n’est pas adapté, manque de soutien ressenti par les équipes de terrain, manque de présence des cadres auprès des salariés, absence d’orientation claire.<br /> Sur un total de coût de 278.000€, nous avons pu compresser 45%.",
@@ -22,6 +24,7 @@ const products = [
     },
     {
         keyWord: "Ancrer",
+        image: "/coaching.jpg",
         title: "Former et Accompagner vos managers",
         description: "Pour des managers sereins et motivants, co-élaboration d’un référentiel managérial ; Une formation fondée sur les 5 fonctions du management : la posture du manager ; l’animation de l’équipes, le pilotage de l’activité ; la relation aux collaborateurs et aux collègues ; la cohérence avec les valeurs et objectifs de l’entreprise. Une approche unique : la subsidiairité qui consiste à donner une capacité d’agir aux collaborateurs en favorisant leur responsabilisation, l’autonomie et leur prise de décision.",
         useCase: "Dans le secteur des assurances, suite à une réorganisation, des collaborateurs sont devenus managers de leurs anciens collègues, certains découvraient le management et la direction générale voulait que chaque collaborateur gagne en autonomie et en responsabilité. Nous avons été sollicités pour former les managers de proximité jusqu’aux membres du CODIR.",
@@ -29,6 +32,7 @@ const products = [
     },
     {
         keyWord: "Mesurer",
+        image: "/application.jpg",
         title: "Mesure du ROI des formations des managers OLI",
         description: "Nous accompagnons les managers dans le temps par un mentor digital dédié à chaque manager et lui permettant au quotidien de trouver des conseils innovants grâce à l'IA, d'avoir des ressources à portée de main et de mettre en oeuvre des plans d'action pour leur progression, celle de leur équipe et de leurs collaborateurs.<br />Chaque manager est rendu capable de mesurer les bénéfices de nouvelles pratiques managériales.<br />SPIRE est capable de vous fournir dans le temps une mesure de la compression des coûts cachés du management et des gains financiers et extra-financiers obtenus.",
         useCase: "Dans une entreprise du secteur agricole, l'ensemble des managers a été formé aux principes du management par la subsidiarité.<br />En parallèle, chaque manager a utilisé OLI pour construire des plans d'actions.<br />Les managers ont pu évaluer régulièrement la mesure de progression des pratiques managériales au sein de leur équipe.<br />Les bénéfices constaté ont pu nous permettre d'établir une mesure du ROI objectivée de la formation pour l'entreprise.",
@@ -91,7 +95,7 @@ export default function ProductsScreen() {
                         }}
                      />
                     <Image
-                        src="/parcours.jpg"
+                        src={products.find(item => item.keyWord === "Parcours")?.image || ""}
                         alt="Parcours"
                         fill
                         className="object-cover z-10"
@@ -145,7 +149,7 @@ export default function ProductsScreen() {
                         }}
                     />
                     <Image
-                        src="/audit.jpg"
+                        src={products.find(item => item.keyWord === "Viser")?.image || ""}
                         alt="Audit"
                         fill
                         className="object-cover z-10"
@@ -180,7 +184,7 @@ export default function ProductsScreen() {
                         }}
                     />
                     <Image
-                        src="/coaching.jpg"
+                        src={products.find(item => item.keyWord === "Ancrer")?.image || ""}
                         alt="Coaching"
                         fill
                         className="object-cover z-10"
@@ -216,7 +220,7 @@ export default function ProductsScreen() {
                         }}
                     />
                     <Image
-                        src="/application.jpg"
+                        src={products.find(item => item.keyWord === "Mesurer")?.image || ""}
                         alt="Application"
                         fill
                         className="object-cover z-10"
@@ -271,7 +275,7 @@ export default function ProductsScreen() {
                             }}
                         />
                         <Image
-                            src="/parcours.jpg"
+                            src={products.find(item => item.keyWord === selectedButton)?.image || ""}
                             alt="Parcours"
                             fill
                             className="absolute top-0 left-0 w-full h-full object-cover z-10"
