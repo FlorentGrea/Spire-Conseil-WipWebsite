@@ -10,6 +10,7 @@ import ContactScreen from "@/components/contactScreen";
 import FooterScreen from "@/components/footerScreen";
 import HeadLine from "@/components/headLine";
 import ProductsScreen from "@/components/screens/productsScreen";
+import ReviewsScreen from "@/components/screens/reviewsScreen";
 
 export default function Home() {
   const homeScreenRef = useRef<{ getLineRightPosition: () => number | null }>(null);
@@ -29,9 +30,9 @@ export default function Home() {
       <HeadLine />
       <HomeScreen />
       <ProductsScreen />
+      <ReviewsScreen />
       {/*
       <SubsidiariteScreen />
-      <TemoignagesScreen />
       <NotreEquipeScreen />
       <ContactScreen />
       <FooterScreen /> */}
