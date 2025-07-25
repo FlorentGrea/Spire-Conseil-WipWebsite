@@ -220,7 +220,7 @@ export default function ProductsScreen() {
                         }}
                     />
                     <Image
-                        src={products.find(item => item.keyWord === "Mesurer")?.image || ""}
+                        src="/application.jpg"
                         alt="Application"
                         fill
                         className="object-cover z-10"
@@ -275,7 +275,10 @@ export default function ProductsScreen() {
                             }}
                         />
                         <Image
-                            src={products.find(item => item.keyWord === selectedButton)?.image || ""}
+                            src={selectedButton === "Parcours" ? "/parcours.jpg" : 
+                                 selectedButton === "Viser" ? "/audit.jpg" : 
+                                 selectedButton === "Ancrer" ? "/coaching.jpg" : 
+                                 selectedButton === "Mesurer" ? "/application.jpg" : "/parcours.jpg"}
                             alt="Parcours"
                             fill
                             className="absolute top-0 left-0 w-full h-full object-cover z-10"
