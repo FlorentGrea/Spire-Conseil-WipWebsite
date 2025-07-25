@@ -117,11 +117,11 @@ export default function TemoignagesScreen() {
   ]
 
   return (
-    <div className="screen-container" data-screen="temoignages">
-      <div className="screen-content flex-col sm:flex-row-reverse">
+    <div className="flex justify-center items-center screen-container bg-sc-tertiary/8" data-screen="temoignages">
+      <div className="screen-content flex-col sm:flex-row-reverse justify-center items-center min-h-screen">
       
         {/* Video Section */}
-          <div className="aspect-video w-full max-w-sm sm:min-w-[300px] lg:min-w-[500px] z-10 rounded-lg overflow-hidden" style={{ boxShadow: `0 6px 8px -1px ${getDynamicShadow(hasMounted, shadowTime)}, 0 4px 6px -1px ${getDynamicShadow(hasMounted, shadowTime)}` }}>
+        <div className=" aspect-video w-full max-w-sm sm:min-w-[40vw] lg:min-w-[500px] z-10 overflow-hidden sm:-mt-30 lg:-mt-40 sm:-ml-4 lg:-ml-10" style={{ boxShadow: `0.20rem 0.20rem color-mix(in srgb, var(--color-sc-secondary) 80%, transparent)` }}>
           <iframe
             src="https://www.youtube.com/embed/ZAmK31x3qDs"
             title="Témoignage Spire Conseil"
@@ -132,15 +132,15 @@ export default function TemoignagesScreen() {
         </div>
           
         {/* Carousel Section */}
-        <div className="max-w-sm sm:max-w-none flex flex-col">
+        <div className=" max-w-sm sm:max-w-none sm:min-w-[35vw] lg:min-w-[600px] flex flex-col bg-sc-primary p-2 sm:p-4 lg:p-8 sm:-mr-4 lg:-mr-10 sm:-mb-30 lg:-mb-40">
           {/* Title on top of the box */}
-          <div className="title-container title-container-v3">
-            <h1 className="title-text">
+          <div className="title-container">
+            <h1 className="title-text text-sc-secondary">
               Ils nous font confiance
             </h1>
           </div>
           
-          <div className="content-box content-box-v4 flex-grow h-[30vh] sm:h-[40vh] px-2 z-10 flex flex-col">
+          <div className="content-box flex-grow h-[30vh] sm:h-[40vh] px-2 z-10 flex flex-col">
             {/* Carousel Container - takes remaining space */}
             <div className="flex-1 overflow-hidden flex flex-col">
               <div className="flex-1 overflow-hidden relative">
@@ -177,15 +177,9 @@ export default function TemoignagesScreen() {
                           }
                         }}
                       >
-                        <blockquote className="text-xs lg:text-sm text-gray-700 leading-relaxed text-left italic">
+                        <blockquote className="text-xs lg:text-sm text-sc-tertiary leading-relaxed text-left italic">
                          {testimonial.quote}
                         </blockquote>
-                      </div>
-                      {/* Shadow gradient at bottom when content overflows */}
-                      <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none transition-opacity duration-300" 
-                           style={{
-                             opacity: testimonial.quote.length > 300 ? 1 : 0
-                           }}>
                       </div>
                     </div>
                   ))}
@@ -193,7 +187,7 @@ export default function TemoignagesScreen() {
               </div>
               
               {/* Bottom section: Author & Position with sliding animation */}
-              <div className="border-t border-gray-200 pt-1 lg:pt-5 mt-auto overflow-hidden">
+              <div className="border-t border-sc-secondary pt-1 lg:pt-5 mt-auto overflow-hidden">
                 <div 
                   className={`flex ${isDragging ? '' : 'transition-transform duration-700 ease-in-out'}`}
                   style={{ 
@@ -204,10 +198,10 @@ export default function TemoignagesScreen() {
                 >
                   {testimonials.map((testimonial, index) => (
                     <div key={index} className="w-full flex-shrink-0">
-                      <h4 className="font-bold text-[#012073] text-xs md:text-sm lg:text-xl xl:text-2xl text-left">
+                      <h4 className="font-bold text-sc-secondary text-xs md:text-sm lg:text-xl xl:text-2xl text-left">
                         {testimonial.author}
                       </h4>
-                      <p className="text-gray-600 text-xs lg:text-sm text-left font-medium">
+                      <p className="text-sc-tertiary text-xs lg:text-sm text-left font-medium">
                         {testimonial.position}
                       </p>
                     </div>
@@ -223,7 +217,7 @@ export default function TemoignagesScreen() {
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                className={`w-2 h-2 transition-all duration-300 ${
                   currentSlide === index ? 'bg-[#012073] w-6' : 'bg-gray-300'
                 }`}
               />

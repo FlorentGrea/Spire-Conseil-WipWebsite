@@ -141,14 +141,14 @@ export default function NotreEquipeScreen() {
               }}
             >
               {/* Title on top of the box */}
-              <div className="title-container title-container-v5">
-                <h2 className="title-text">
+                              <div className="title-container">
+                <h2 className="title-text text-sc-secondary">
                   {content.title}
                 </h2>
               </div>
               
-              <div className="content-box content-box-v5 w-full">
-                <div className="text-xs lg:text-xl text-gray-700 leading-relaxed space-y-4 sm:space-y-6 text-center sm:text-left">
+                              <div className="content-box w-full">
+                <div className="text-xs lg:text-xl text-sc-tertiary leading-relaxed space-y-4 sm:space-y-6 text-center sm:text-left">
                   <p>
                     {content.description}
                   </p>

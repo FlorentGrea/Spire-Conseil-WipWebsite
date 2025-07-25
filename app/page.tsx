@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import HomeScreen from "@/components/homeScreen";
+import HomeScreen from "@/components/screens/homeScreen";
 import OffersScreen from "@/components/offersScreen";
 import SubsidiariteScreen from "@/components/subsidiariteScreen";
 import TemoignagesScreen from "@/components/temoignagesScreen";
@@ -9,6 +9,7 @@ import NotreEquipeScreen from "@/components/notreEquipeScreen";
 import ContactScreen from "@/components/contactScreen";
 import FooterScreen from "@/components/footerScreen";
 import HeadLine from "@/components/headLine";
+import ProductsScreen from "@/components/screens/productsScreen";
 
 export default function Home() {
   const homeScreenRef = useRef<{ getLineRightPosition: () => number | null }>(null);
@@ -24,15 +25,16 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen w-full overflow-y-scroll overflow-x-hidden relative">
+    <div className="w-full overflow-x-hidden" style={{ backgroundColor: 'var(--color-sc-primary)' }}>
       <HeadLine />
-      <HomeScreen ref={homeScreenRef} onLinePositionChange={handleLinePositionUpdate} />
-      <OffersScreen lineRightPosition={lineRightPosition} />
+      <HomeScreen />
+      <ProductsScreen />
+      {/*
       <SubsidiariteScreen />
       <TemoignagesScreen />
       <NotreEquipeScreen />
       <ContactScreen />
-      <FooterScreen />
+      <FooterScreen /> */}
     </div>
   );
 }

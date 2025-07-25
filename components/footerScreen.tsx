@@ -7,13 +7,13 @@ export default function FooterScreen() {
         
         {/* Contact Info Section */}
         <div className="flex flex-col items-center justify-center max-w-sm sm:max-w-md lg:max-w-lg">
-          <div className="title-container title-container-v3">
-            <h2 className="title-text">
+                      <div className="title-container">
+            <h2 className="title-text text-sc-secondary">
               Échangeons de vive voix
             </h2>
           </div>
           
-                      <div className="content-box content-box-v3 w-full">
+                      <div className="content-box w-full">
             <div className="flex flex-col items-center text-center">
               
               <div className="space-y-3 lg:space-y-6 w-full">
@@ -29,7 +29,7 @@ export default function FooterScreen() {
                       <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                     </svg>
                   </div>
-                  <a href="mailto:contact@spire-conseil.fr" className="text-gray-700 hover:text-[#012073] transition-colors text-sm lg:text-xl font-medium">
+                  <a href="mailto:contact@spire-conseil.fr" className="text-sc-tertiary hover:text-[#012073] transition-colors text-sm lg:text-xl font-medium">
                     contact@spire-conseil.fr
                   </a>
                 </div>
@@ -46,11 +46,11 @@ export default function FooterScreen() {
                         <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                       </svg>
                     </div>
-                    <a href="tel:0651464048" className="text-gray-700 hover:text-[#012073] transition-colors font-semibold text-sm lg:text-xl">
+                    <a href="tel:0651464048" className="text-sc-tertiary hover:text-[#012073] transition-colors font-semibold text-sm lg:text-xl">
                       06 51 46 40 48
                     </a>
                   </div>
-                  <p className="text-gray-600 text-xs lg:text-sm mt-1 ml-9 lg:ml-12">
+                  <p className="text-sc-tertiary text-xs lg:text-sm mt-1 ml-9 lg:ml-12">
                     Du lundi au vendredi 9h 17h
                   </p>
                 </div>
@@ -69,18 +69,18 @@ export default function FooterScreen() {
                 <div className="text-2xl lg:text-3xl font-bold text-[#012073]">
                   SPIRE
                 </div>
-                <div className="text-2xl lg:text-3xl text-gray-600">
+                <div className="text-2xl lg:text-3xl text-sc-tertiary">
                   - CONSEIL
                 </div>
               </div>
               
               {/* Tagline */}
-              <p className="text-xs lg:text-lg text-gray-600 max-w-md">
+                              <p className="text-xs lg:text-lg text-sc-tertiary max-w-md">
                 Accompagnement en management subsidiaire pour organisations responsables
               </p>
               
               {/* Copyright */}
-              <div className="text-xs lg:text-sm text-gray-500">
+                              <div className="text-xs lg:text-sm text-sc-tertiary">
                 © {new Date().getFullYear()} SPIRE CONSEIL. Tous droits réservés.
               </div>
               

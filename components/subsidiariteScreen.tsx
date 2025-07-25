@@ -1,69 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
-
-function Hexagon({ image, onClick, noEffects, isSelected }: { image: string, onClick?: () => void, noEffects?: boolean, isSelected?: boolean }) {
-  // Flat-topped hexagon points (horizontal orientation)
-  const hexPoints = "43,25 43,-25 0,-50 -43,-25 -43,25 0,50";
-  const [hover, setHover] = useState(false);
-  const [isLg, setIsLg] = useState(false);
-  
-  useEffect(() => {
-    const checkSize = () => {
-      setIsLg(window.innerWidth >= 1024);
-    };
-    checkSize();
-    window.addEventListener('resize', checkSize);
-    return () => window.removeEventListener('resize', checkSize);
-  }, []);
-  
-  const size = isLg ? 120 : 70;
-  const fillColor = "#012073";
-  
-  return (
-    <div className={isSelected ? 'hexagon-selected' : ''}>
-      <svg
-        width={size}
-        height={size}
-        viewBox="-60 -60 120 120"
-        style={{ 
-          cursor: noEffects ? 'default' : 'pointer',
-          filter: 'drop-shadow(3px 3px 3px rgba(0,0,0,0.8))'
-        }}
-        onMouseEnter={noEffects ? undefined : () => setHover(true)}
-        onMouseLeave={noEffects ? undefined : () => setHover(false)}
-        onClick={onClick}
-      >
-                <defs>
-          <clipPath id={image.replace(/\W/g, "") + "-clip"}>
-            <polygon points={hexPoints} />
-          </clipPath>
-          <filter id={image.replace(/\W/g, "") + "-shadow"}>
-            <feDropShadow dx="2" dy="4" stdDeviation="6" floodColor="rgba(0,0,0,0.25)"/>
-            <feDropShadow dx="1" dy="2" stdDeviation="3" floodColor="rgba(0,0,0,0.15)"/>
-          </filter>
-
-        </defs>
-        <polygon 
-          points={hexPoints} 
-          fill={fillColor} 
-          stroke={fillColor} 
-          strokeWidth="4"
-          filter={noEffects ? 'none' : hover ? 'drop-shadow(0 2px 4px #f7e400dd)' : 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'}
-        />
-        <image
-          href={`/${image}`}
-          x={-50}
-          y={-50}
-          width={100}
-          height={100}
-          clipPath={`url(#${image.replace(/\W/g, "")}-clip)`}
-          preserveAspectRatio="xMidYMid slice"
-        />
-      </svg>
-    </div>
-  );
-}
+import SubsidiariteCircle from "./SubsidiariteCircle"
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import Image from "next/image";
 
 export default function SubsidiariteScreen() {
   const [activeHex, setActiveHex] = useState<string | null>(null);
@@ -72,6 +11,17 @@ export default function SubsidiariteScreen() {
   const [gradientRotation, setGradientRotation] = useState<number>(-50);
   const [drawingComplete, setDrawingComplete] = useState(false);
   const [isManualSelection, setIsManualSelection] = useState(false);
+  const [selectedButton, setSelectedButton] = useState<string | null>(null);
+
+  // Button position variables
+  const buttonPositions = {
+    proximite: "absolute top-1/20 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
+    sub1: "absolute top-3/10 right-1/10 transform translate-x-1/2 -translate-y-1/2",
+    sub2: "absolute bottom-3/10 right-1/10 transform translate-x-1/2 translate-y-1/2",
+    sub3: "absolute bottom-1/20 left-1/2 transform -translate-x-1/2 translate-y-1/2",
+    sub4: "absolute bottom-3/10 left-1/10 transform -translate-x-1/2 translate-y-1/2",
+    sub5: "absolute top-3/10 left-1/10 transform -translate-x-1/2 -translate-y-1/2"
+  };
   
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -136,25 +86,25 @@ export default function SubsidiariteScreen() {
       title: "Proximité",
       description: "Les décisions doivent être prises là où les enjeux sont compris — sur le terrain. Faire confiance à ceux qui vivent les situations directement, car ils ont la meilleure lecture du contexte."
     },
-    autonomie: {
-      title: "Autonomie", 
-      description: "Donner une autonomie réelle aux équipes : laisser les collaborateurs organiser leur travail et prendre des décisions adaptées. Un cadre clair mais souple, sans validation hiérarchique systématique."
+    sub1: {
+      title: "La culture managériale",
+      description: "La subsidiarité est impossible sans confiance. Croire en la capacité des collaborateurs à prendre les bonnes décisions. Une confiance qui se construit par la qualité des échanges et la transparence."  
     },
-    responsabilite: {
-      title: "Responsabilité",
-      description: "L'autonomie va de pair avec la responsabilité. Chaque acteur est comptable de ses décisions et accompagné dans l'apprentissage. Cette responsabilisation développe l'engagement des équipes."
+    sub2: {
+      title: "Les coûts cachés",
+      description: "Les coûts cachés que nous identifions, réduisons et mesurons avec précision."
     },
-    confiance: {
-      title: "Confiance",
-      description: "La subsidiarité est impossible sans confiance. Croire en la capacité des collaborateurs à prendre les bonnes décisions. Une confiance qui se construit par la qualité des échanges et la transparence."
+    sub3: {
+      title: "La performance",
+      description: "La performance, grâce à une mobilisation accrue, des décisions plus agiles et une responsabilisation généralisée."
     },
-    soutien: {
-      title: "Soutien",
-      description: "Le manager intervient en soutien : apporter un cadre, des ressources, des conseils si nécessaire. Favoriser la réussite sans faire à la place. Un accompagnement intelligent qui respecte les compétences."
+    sub4: {
+      title: "Les pratiques",
+      description: "Les pratiques, en favorisant l’autonomie et la coopération à chaque niveau."
     },
-    clarte: {
-      title: "Clarté",
-      description: "Clarté des rôles, responsabilités, marges de manœuvre et objectifs. Être explicite sur qui décide quoi et où s'arrête l'autonomie. Sans clarté, confusion et blocages."
+    sub5: {
+      title: "Les postures",
+      description: "Les postures, avec des managers qui soutiennent plutôt que contrôlent."
     }
   };
 
@@ -169,11 +119,11 @@ export default function SubsidiariteScreen() {
     // Update gradient rotation based on selected hexagon
     const hexPositions = {
       proximite: -90,    // Top (12 o'clock position) - adjusted from 90
-      autonomie: -30,     // Top-right (2 o'clock position) - adjusted from 30
-      responsabilite: 30, // Bottom-right (4 o'clock position) - adjusted from -30
-      confiance: 90,  // Bottom (6 o'clock position) - adjusted from -90
-      soutien: 150,    // Bottom-left (8 o'clock position) - adjusted from -150
-      clarte: 210       // Top-left (10 o'clock position) - adjusted from 150
+      sub1: -30,     // Top-right (2 o'clock position) - adjusted from 30
+      sub2: 30, // Bottom-right (4 o'clock position) - adjusted from -30
+      sub3: 90,  // Bottom (6 o'clock position) - adjusted from -90
+      sub4: 150,    // Bottom-left (8 o'clock position) - adjusted from -150
+      sub5: 210       // Top-left (10 o'clock position) - adjusted from 150
     };
     
     const targetRotation = hexPositions[hexKey as keyof typeof hexPositions] || -50;
@@ -182,7 +132,7 @@ export default function SubsidiariteScreen() {
 
   const getSlideDirection = (hexKey: string) => {
     // Define the order of text transitions
-    const textOrder = ['proximite', 'autonomie', 'responsabilite', 'confiance', 'soutien', 'clarte'];
+    const textOrder = ['proximite', 'sub1', 'sub2', 'sub3', 'sub4', 'sub5'];
     
     // If no previous hex was active, slide from left (first transition)
     if (!activeHex) {
@@ -209,156 +159,230 @@ export default function SubsidiariteScreen() {
 
   const currentContent = activeHex ? hexContent[activeHex as keyof typeof hexContent] : hexContent.default;
 
+  const handleButtonClick = (buttonKey: string) => {
+    setSelectedButton(selectedButton === buttonKey ? null : buttonKey);
+  };
+
+  const buttonTexts = {
+    culture: "La culture managériale, en développant confiance, initiative et droit à l'erreur.",
+    couts: "Les coûts cachés, que nous identifions, réduisons et mesurons avec précision.",
+    performance: "La performance, grâce à une mobilisation accrue, des décisions plus agiles et une responsabilisation généralisée.",
+    pratiques: "Les pratiques, en favorisant l'autonomie et la coopération à chaque niveau.",
+    postures: "Les postures, avec des managers qui soutiennent plutôt que contrôlent."
+  };
+
   return (
-    <div className="screen-container"  data-screen="subsidiarite">
-      <div className="screen-content flex-col sm:flex-row">
-          
-        {/* C-Shaped Gradient Arrow Section */}
-        <div className="flex items-center justify-center relative">
-          <div className="relative size-[15rem] lg:size-[20rem] lg:size-[28rem]">
-            <svg 
-              className="w-full h-full" 
-              viewBox="0 0 100 100"
-              style={{ filter: 'drop-shadow(3px 3px 3px rgba(0,0,0,0.8))' }}
+    <div className="screen-container bg-sc-tertiary/8"  data-screen="subsidiarite">
+             <div className="screen-content flex-col" style={{ paddingLeft: '0', paddingRight: '0' }}>
+        <div className="flex flex-col sm:flex-row justify-center items-center sm:max-h-[40vh]" data-screen="subsidiarite-image">
+          <Image 
+             src="/Application.jpg" 
+             alt="Subsidiarite" 
+             width={400} 
+             height={400} 
+             className="aspect-video sm:aspect-square h-[30vh] sm:h-full w-full object-cover relative z-20"
+           />
+          <div className="flex flex-col bg-sc-primary w-[90%] sm:w-auto h-auto sm:h-[90%] p-4 sm:p-8 -mt-5 sm:mt-0 sm:-ml-5">
+            <div className="title-container text-center sm:text-left mb-0">
+              <h1 className="title-text text-sc-secondary text-center sm:text-left">
+                Notre méthode: la subsidiarité
+              </h1>
+            </div>
+            <div
+              className="text-xs lg:text-lg text-sc-tertiary leading-relaxed space-y-4 sm:space-y-6 text-justify sm:text-left"
             >
-              <defs>
-                <linearGradient id="arrowGradient" x1="0%" y1="50%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#012073" />
-                  <stop offset="70%" stopColor="#012073" />
-                  <stop offset="100%" stopColor="#fbbf24" />
-                </linearGradient>
-              </defs>
-                
-              {/* Animated drawing circle */}
-              <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                stroke="url(#arrowGradient)"
-                strokeWidth="6"
-                strokeLinecap={drawingComplete ? "square" : "round"}
-                strokeDasharray="280"
-                strokeDashoffset="280"
-                className={`${isVisible ? 'animate-draw-circle' : ''}`}
-                style={{ 
-                  transform: `rotate(${gradientRotation}deg)`, 
-                  transformOrigin: '50px 50px',
-                  transition: 'transform 0.6s ease-in-out'
-                }}
-              />
-                
-              {/* Center text with better positioning */}
-              <text
-                x="50"
-                y="48"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className="font-bold cursor-pointer"
-                style={{ 
-                  fontSize: 'min(1.5vw, 8px)', 
-                  fill: '#1e3a8a',
-                  filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.8)) drop-shadow(0 0 4px rgba(255,255,255,0.6))',
-                  transformOrigin: '50px 48px'
-                }}
-                onClick={() => setActiveHex(null)}
-              >
-                <tspan x="50" dy="-4">Vers la</tspan>
-                <tspan x="50" dy="8">subsidiarité</tspan>
-              </text>
-                
-              {/* Clickable center area */}
-              <circle
-                cx="50"
-                cy="50"
-                r="15"
-                fill="transparent"
-                className="cursor-pointer"
-                onClick={() => setActiveHex(null)}
-                style={{ pointerEvents: 'auto' }}
-              />
-            </svg>
-              
-            {/* Clickable center area */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div 
-                className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 cursor-pointer z-10"
-                onClick={() => setActiveHex(null)}
-              />
+              <p>
+                Chez SPIRE, nous plaçons la subsidiarité au cœur du management. Ce principe puissant consiste à permettre la décision au plus près du terrain, là où les enjeux sont réels, les responsabilités claires, les relations vertueuses et l’action immédiate. <br /> 
+                <strong>Notre approche transforme en profondeur 5 grands aspects de votre organisation:</strong>
+              </p>
             </div>
-              
-            {/* Hexagons around the circle */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              {/* Top hexagon */}
-              <div className={`absolute -top-2 sm:top-0 right-1/8 sm:right-1/7 transform cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('proximite')}>
-                <Hexagon image="proximity.jpg" isSelected={activeHex === 'proximite'} />
-                <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'proximite' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Proximité</span>
-                </div>
-              </div>
-                
-              {/* Top-right hexagon */}
-              <div className={`absolute top-1/2 -right-5 sm:-right-4 lg:-right-8 transform -translate-y-1/2 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.3s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('autonomie')}>
-                <Hexagon image="autonomy.jpg" isSelected={activeHex === 'autonomie'} />
-                <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'autonomie' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Autonomie</span>
-                </div>
-              </div>
-                
-              {/* Bottom-right hexagon */}
-              <div className={`absolute -bottom-2 sm:bottom-0 right-1/8 sm:right-1/7 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.6s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('responsabilite')}>
-                <Hexagon image="responsibility.jpg" isSelected={activeHex === 'responsabilite'} />
-                <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'responsabilite' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Responsabilité</span>
-                </div>
-              </div>
-                
-              {/* Bottom hexagon */}
-              <div className={`absolute -bottom-2 sm:bottom-0 left-1/8 sm:left-1/7 transform cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '0.9s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('confiance')}>
-                <Hexagon image="trust.jpg" isSelected={activeHex === 'confiance'} />
-                <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'confiance' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Confiance</span>
-                </div>
-              </div>
-                
-              {/* Bottom-left hexagon */}
-              <div className={`absolute top-1/2 -left-5 sm:-left-4 lg:-left-8 transform -translate-y-1/2 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.2s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('soutien')}>
-                <Hexagon image="support.jpg" isSelected={activeHex === 'soutien'} />
-                <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'soutien' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Soutien</span>
-                </div>
-              </div>
-                
-              {/* Top-left hexagon */}
-              <div className={`absolute -top-2 sm:top-0 left-1/8 sm:left-1/7 cursor-pointer ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: isVisible ? '1.5s' : '0s', animationFillMode: 'both' }} onClick={() => handleHexInteraction('clarte')}>
-                <Hexagon image="clarity.jpg" isSelected={activeHex === 'clarte'} />
-                <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
-                  <span className={`text-white font-bold text-xs sm:text-xs md:text-sm px-2 py-1 rounded shadow-lg transition-all duration-300 ${activeHex === 'clarte' ? 'label-selected text-[#012073]' : 'bg-[#012073]/90'}`}>Clarté</span>
-                </div>
-              </div>
-            </div>
+
+                         <div className="flex flex-col sm:flex-row gap-2 mt-4">  
+               <div className="flex flex-col">
+                 <button 
+                     className={`button text-lg sm:text-xs md:text-sm lg:text-xl px-2 py-1 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold ${selectedButton === 'culture' ? 'transform-none shadow-none' : ''}`}
+                     onClick={() => handleButtonClick('culture')}
+                     data-state={selectedButton === 'culture' ? 'active' : 'inactive'}
+                   >
+                     La culture managériale
+                 </button>
+                 {/* Mobile: text under button */}
+                 <div className="sm:hidden">
+                   {selectedButton === 'culture' && (
+                     <p className="text-xs text-sc-tertiary mt-2 text-center animate-slide-in">
+                       {buttonTexts.culture}
+                     </p>
+                   )}
+                 </div>
+               </div>
+               
+               <div className="flex flex-col">
+                 <button 
+                     className={`button text-lg sm:text-xs md:text-sm lg:text-xl px-2 py-1 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold ${selectedButton === 'couts' ? 'transform-none shadow-none' : ''}`}
+                     onClick={() => handleButtonClick('couts')}
+                     data-state={selectedButton === 'couts' ? 'active' : 'inactive'}
+                   >
+                     Les coûts cachés
+                 </button>
+                 {/* Mobile: text under button */}
+                 <div className="sm:hidden">
+                   {selectedButton === 'couts' && (
+                     <p className="text-xs text-sc-tertiary mt-2 text-center animate-slide-in">
+                       {buttonTexts.couts}
+                     </p>
+                   )}
+                 </div>
+               </div>
+               
+               <div className="flex flex-col">
+                 <button 
+                     className={`button text-lg sm:text-xs md:text-sm lg:text-xl px-2 py-1 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold ${selectedButton === 'performance' ? 'transform-none shadow-none' : ''}`}
+                     onClick={() => handleButtonClick('performance')}
+                     data-state={selectedButton === 'performance' ? 'active' : 'inactive'}
+                   >
+                     La performance
+                 </button>
+                 {/* Mobile: text under button */}
+                 <div className="sm:hidden">
+                   {selectedButton === 'performance' && (
+                     <p className="text-xs text-sc-tertiary mt-2 text-center animate-slide-in">
+                       {buttonTexts.performance}
+                     </p>
+                   )}
+                 </div>
+               </div>
+               
+               <div className="flex flex-col">
+                 <button 
+                     className={`button text-lg sm:text-xs md:text-sm lg:text-xl px-2 py-1 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold ${selectedButton === 'pratiques' ? 'transform-none shadow-none' : ''}`}
+                     onClick={() => handleButtonClick('pratiques')}
+                     data-state={selectedButton === 'pratiques' ? 'active' : 'inactive'}
+                   >
+                     Les pratiques
+                 </button>
+                 {/* Mobile: text under button */}
+                 <div className="sm:hidden">
+                   {selectedButton === 'pratiques' && (
+                     <p className="text-xs text-sc-tertiary mt-2 text-center animate-slide-in">
+                       {buttonTexts.pratiques}
+                     </p>
+                   )}
+                 </div>
+               </div>
+               
+               <div className="flex flex-col">
+                 <button 
+                     className={`button text-lg sm:text-xs md:text-sm lg:text-xl px-2 py-1 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold ${selectedButton === 'postures' ? 'transform-none shadow-none' : ''}`}
+                     onClick={() => handleButtonClick('postures')}
+                     data-state={selectedButton === 'postures' ? 'active' : 'inactive'}
+                   >
+                     Les postures
+                 </button>
+                 {/* Mobile: text under button */}
+                 <div className="sm:hidden">
+                   {selectedButton === 'postures' && (
+                     <p className="text-xs text-sc-tertiary mt-2 text-center animate-slide-in">
+                       {buttonTexts.postures}
+                     </p>
+                   )}
+                 </div>
+               </div>
+                          </div>
+           </div>
+         </div>
+
+         {/* Desktop: Content section below parent div */}
+         <div className="hidden sm:block w-[96%]">
+           {selectedButton && (
+             <div className="bg-sc-primary p-6 animate-slide-in">
+               <div className="title-container text-center sm:text-left mb-4">
+                 <h2 className="title-text text-sc-secondary text-xl font-bold">
+                   {selectedButton === 'culture' && 'La culture managériale'}
+                   {selectedButton === 'couts' && 'Les coûts cachés'}
+                   {selectedButton === 'performance' && 'La performance'}
+                   {selectedButton === 'pratiques' && 'Les pratiques'}
+                   {selectedButton === 'postures' && 'Les postures'}
+                 </h2>
+               </div>
+               <div className="text-sm lg:text-lg text-sc-tertiary leading-relaxed text-center sm:text-left">
+                 <p>
+                   {buttonTexts[selectedButton as keyof typeof buttonTexts]}
+                 </p>
+               </div>
+             </div>
+           )}
+         </div>
+
+         {/* C-Shaped Gradient Arrow Section */}
+        {/*}
+        <SubsidiariteCircle
+          isVisible={isVisible}
+          drawingComplete={drawingComplete}
+          gradientRotation={gradientRotation}
+          activeHex={activeHex}
+          onHexInteraction={handleHexInteraction}
+          onCenterClick={() => setActiveHex(null)}
+        />
+        <div className="flex flex-col">
+          
+          <button 
+            className="button text-lg lg:text-xl px-6 py-2 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold"
+          >
+            Nous contacter
+          </button>
+          <div className="flex flex-col">
+            <h1 className="title-text text-sc-secondary text-center sm:text-left">
+            La subsidiarite agit sur:
+            </h1>
+          </div>
+          <div className="flex flex-row gap-1">
+            <button 
+              className="button text-xs lg:text-xl px-2 py-1 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold"
+            >
+              {hexContent["sub1"].title}
+            </button>
+            <button 
+              className="button text-xs lg:text-xl px-2 py-1 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold"
+            >
+              {hexContent["sub2"].title}
+            </button>
+            <button 
+              className="button text-xs lg:text-xl px-2 py-1 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold"
+            >
+              {hexContent["sub3"].title}
+            </button>
+            <button 
+              className="button text-xs lg:text-xl px-2 py-1 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold"
+            >
+              {hexContent["sub4"].title}
+            </button>
+            <button 
+              className="button text-xs lg:text-xl px-2 py-1 bg-sc-secondary text-sc-primary font-['Barlow_Semi_Condensed'] font-bold"
+            >
+              {hexContent["sub5"].title}
+            </button>
           </div>
         </div>
 
-        {/* Content Section */}
-        <div className="flex flex-col w-full max-w-sm sm:max-w-none flex-grow">
-          {/* Title on top of the box */}
-          <div className="title-container title-container-v3">
-            <h2 key={`title-${activeHex || 'default'}`} className={`title-text transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
+        {/* Content Section
+        <div className="flex flex-col w-full max-w-sm sm:max-w-none flex-grow content-box h-[30vh] sm:h-fit px-2 z-10">
+          {/* Title on top of the box
+          <div className="title-container text-center sm:text-left mb-0">
+            <h2 key={`title-${activeHex || 'default'}`} className={`title-text text-sc-secondary transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
               {currentContent.title}
             </h2>
           </div>
           
-          <div className="content-box content-box-v3 h-[30vh] sm:h-fit px-2 z-10 flex-grow">
-            <p key={`description-${activeHex || 'default'}`} className={`text-xs lg:text-xl text-gray-700 leading-relaxed text-center sm:text-left transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
-              {!activeHex ? (
-                <span dangerouslySetInnerHTML={{ __html: currentContent.description }} />
-              ) : (
-                currentContent.description
-              )}
-            </p>
-          </div>
+          <p key={`description-${activeHex || 'default'}`} className={`text-xs lg:text-xl text-sc-tertiary leading-relaxed text-center sm:text-left transition-all duration-300 ${activeHex ? textAnimation : ''}`}>
+            {!activeHex ? (
+              <span dangerouslySetInnerHTML={{ __html: currentContent.description }} />
+            ) : (
+              currentContent.description
+            )}
+          </p>
         </div>
+        
+        */}
       </div>
     </div>
   )
