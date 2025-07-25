@@ -32,7 +32,7 @@ const products = [
     },
     {
         keyWord: "Mesurer",
-        image: "/application.jpg",
+        image: "/mesurer.jpg",
         title: "Mesure du ROI des formations des managers OLI",
         description: "Nous accompagnons les managers dans le temps par un mentor digital dédié à chaque manager et lui permettant au quotidien de trouver des conseils innovants grâce à l'IA, d'avoir des ressources à portée de main et de mettre en oeuvre des plans d'action pour leur progression, celle de leur équipe et de leurs collaborateurs.<br />Chaque manager est rendu capable de mesurer les bénéfices de nouvelles pratiques managériales.<br />SPIRE est capable de vous fournir dans le temps une mesure de la compression des coûts cachés du management et des gains financiers et extra-financiers obtenus.",
         useCase: "Dans une entreprise du secteur agricole, l'ensemble des managers a été formé aux principes du management par la subsidiarité.<br />En parallèle, chaque manager a utilisé OLI pour construire des plans d'actions.<br />Les managers ont pu évaluer régulièrement la mesure de progression des pratiques managériales au sein de leur équipe.<br />Les bénéfices constaté ont pu nous permettre d'établir une mesure du ROI objectivée de la formation pour l'entreprise.",
@@ -218,7 +218,7 @@ export default function ProductsScreen() {
                         }}
                     />
                     <Image
-                        src="/application.jpg"
+                        src="/mesurer.jpg"
                         alt="Application"
                         fill
                         className="object-cover z-10"
@@ -276,7 +276,7 @@ export default function ProductsScreen() {
                             src={selectedButton === "Parcours" ? "/parcours.jpg" : 
                                  selectedButton === "Viser" ? "/audit.jpg" : 
                                  selectedButton === "Ancrer" ? "/coaching.jpg" : 
-                                 selectedButton === "Mesurer" ? "/application.jpg" : "/parcours.jpg"}
+                                 selectedButton === "Mesurer" ? "/mesurer.jpg" : "/parcours.jpg"}
                             alt="Parcours"
                             fill
                             className="absolute top-0 left-0 w-full h-full object-cover z-10"
