@@ -68,9 +68,7 @@ export default function ProductsScreen() {
   return (
     <div 
         className="screen-container"
-        style={{
-            backgroundColor: 'color-mix(in srgb, var(--color-sc-tertiary) 9%, transparent)',
-        }}
+        style={{ backgroundColor: 'color-mix(in srgb, var(--color-sc-tertiary) 9%, transparent)' }}
         data-screen="products"
     >
         <div className="screen-content flex flex-col gap-4">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Hexagon from "../svgs/hexagone";
 
 export default function ReviewsScreen() {
   const [rating, setRating] = useState(0);
@@ -122,22 +123,87 @@ export default function ReviewsScreen() {
     console.log({ rating, review, name });
   };
 
-  return (
-    <div className="screen-container">
-        <div className="screen-content">
-            <h1 className="text-2xl font-bold mb-6">Product Reviews</h1>
+  const hexPositions = [
+    { col: 1,  rows: [2, 4] },
+    { col: 4,  rows: [1, 3] },
+    { col: 7,  rows: [2, 4] },
+    { col: 10, rows: [3, 5] },
+    { col: 13, rows: [2, 4] },
+    { col: 16, rows: [1, 3] },
+    { col: 19, rows: [2, 4] },
+    { col: 22, rows: [3, 5] },
+    { col: 25, rows: [2, 4] },
+    { col: 28, rows: [1, 3] },
+    { col: 31, rows: [2, 4] },
+    { col: 34, rows: [3, 5] },
+    { col: 37, rows: [2, 4] },
+    { col: 40, rows: [1, 3] },
+    { col: 43, rows: [2, 4] },
+    { col: 46, rows: [3, 5] },
+    { col: 49, rows: [2, 4] },
+    { col: 52, rows: [1, 3] },
+    { col: 55, rows: [2, 4] },
+    { col: 58, rows: [3, 5] },
+    { col: 61, rows: [2, 4] },
+    { col: 64, rows: [1, 3] },
+    { col: 67, rows: [2, 4] },
+  ];
 
-      
+  return (
+    <div 
+        className="screen-container" 
+        style={{ backgroundColor: 'color-mix(in srgb, var(--color-sc-tertiary) 9%, transparent)' }}
+        data-screen="reviews"
+    >
+        <div className="screen-content relative">
+
+            {/* Grid Section */}
+            <div className="absolute top-0 grid grid-cols-72 grid-rows-6 gap-12 w-[200%] left-1/2 -translate-x-1/2 h-fit z-10">
+                {hexPositions.map(({ col, rows }, idx) =>
+                    rows.map((row, i) => (
+                        <div
+                            key={`${idx}-${i}`}
+                            style={{
+                                gridColumnStart: col,
+                                gridColumnEnd: col + 4,
+                                gridRowStart: row,
+                                gridRowEnd: row + 2,
+                                color: 'var(--color-sc-primary)',
+                            }}
+                            className="aspect-square rotate-90 p-1"
+                        >
+                            <Hexagon
+                                className="size-32"
+                            />
+                        </div>
+                    ))
+                )}
+            </div>
+            
+            {/* Video Section */}
+            <div className="absolute top-1/2 -translate-y-full right-0 aspect-video w-[90%] sm:w-[60%] md:w-[70%] z-30 overflow-hidden" style={{ boxShadow: `0.20rem 0.20rem color-mix(in srgb, var(--color-sc-secondary) 80%, transparent)` }}>
+                <iframe
+                    src="https://www.youtube.com/embed/ZAmK31x3qDs"
+                    title="Témoignage Spire Conseil"
+                    className="size-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                />
+            </div>
+
             {/* Carousel Section */}
-            <div className=" max-w-sm sm:max-w-none sm:min-w-[35vw] lg:min-w-[600px] flex flex-col bg-sc-primary p-2 sm:p-4 lg:p-8 sm:-mr-4 lg:-mr-10 sm:-mb-30 lg:-mb-40">
+            <div 
+                className="absolute bottom-1/2 translate-y-full left-0 w-[90%] sm:w-[80%] lg:w-[70%] z-20 !aspect-video flex flex-col p-2 sm:p-4 lg:p-8"
+                style={{ backgroundColor: 'var(--color-sc-secondary)' }}
+            >
                 {/* Title on top of the box */}
                 <div className="title-container">
-                    <h1 className="title-text text-sc-secondary">
+                    <h1 className="title-text" style={{ color: 'var(--color-sc-primary)' }}>
                         Ils nous font confiance
                     </h1>
                 </div>
           
-                <div className="content-box flex-grow h-[30vh] sm:h-[40vh] px-2 z-10 flex flex-col">
+                <div className="flex-grow h-[30vh] sm:h-[30vh] px-2 z-10 flex flex-col">
                     {/* Carousel Container - takes remaining space */}
                     <div className="flex-1 overflow-hidden flex flex-col">
                         <div className="flex-1 overflow-hidden relative">
@@ -147,7 +213,7 @@ export default function ReviewsScreen() {
                                 style={{ 
                                     transform: isDragging 
                                     ? `translateX(${currentTranslate}px)` 
-                                    : `translateX(-${currentSlide * 100}%)` 
+                                    : `translateX(-${currentSlide * 100}%)`,
                                 }}
                                 onMouseDown={handleStart}
                                 onMouseMove={handleMove}
@@ -174,7 +240,7 @@ export default function ReviewsScreen() {
                                                 }
                                             }}
                                         >
-                                            <blockquote className="text-xs lg:text-sm text-sc-tertiary leading-relaxed text-left italic">
+                                            <blockquote className="text-xs lg:text-sm leading-relaxed text-left italic" style={{ color: 'var(--color-sc-quaternary)' }}>
                                                 {testimonial.quote}
                                             </blockquote>
                                         </div>
@@ -184,7 +250,10 @@ export default function ReviewsScreen() {
                         </div>
                           
                         {/* Bottom section: Author & Position with sliding animation */}
-                        <div className="border-t border-sc-secondary pt-1 lg:pt-5 mt-auto overflow-hidden">
+                        <div 
+                            className="border-t pt-1 lg:pt-5 mt-auto overflow-hidden" 
+                            style={{ borderColor: 'var(--color-sc-primary)' }}
+                        >
                             <div 
                                 className={`flex ${isDragging ? '' : 'transition-transform duration-700 ease-in-out'}`}
                                 style={{ 
@@ -195,10 +264,10 @@ export default function ReviewsScreen() {
                             >
                                 {testimonials.map((testimonial, index) => (
                                     <div key={index} className="w-full flex-shrink-0">
-                                        <h4 className="font-bold text-sc-secondary text-xs md:text-sm lg:text-xl xl:text-2xl text-left">
+                                        <h4 className="font-bold text-xs md:text-sm lg:text-xl xl:text-2xl text-left" style={{ color: 'var(--color-sc-primary)' }}>
                                             {testimonial.author}
                                         </h4>
-                                        <p className="text-sc-tertiary text-xs lg:text-sm text-left font-medium">
+                                        <p className="text-xs lg:text-sm text-left font-medium" style={{ color: 'var(--color-sc-quaternary)' }}>
                                             {testimonial.position}
                                         </p>
                                     </div>
@@ -215,7 +284,7 @@ export default function ReviewsScreen() {
                         key={index}
                         onClick={() => setCurrentSlide(index)}
                         className={`w-2 h-2 transition-all duration-300 ${
-                            currentSlide === index ? 'bg-[#012073] w-6' : 'bg-gray-300'
+                            currentSlide === index ? 'bg-sc-primary w-6' : 'bg-sc-quaternary'
                         }`}
                     />
                 ))}

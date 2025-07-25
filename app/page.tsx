@@ -30,7 +30,7 @@ export default function Home() {
       <HeadLine />
       <HomeScreen />
       <ProductsScreen />
-      {/*<ReviewsScreen />*/}
+      <ReviewsScreen />
       {/*
       <SubsidiariteScreen />
       <NotreEquipeScreen />

@@ -60,7 +60,7 @@ export default function HeadLine() {
     } else if (sectionIndex === 2) {
       targetSection = document.querySelector('[data-screen="subsidiarite"]');
     } else if (sectionIndex === 3) {
-      targetSection = document.querySelector('[data-screen="temoignages"]');
+      targetSection = document.querySelector('[data-screen="reviews"]');
     } else if (sectionIndex === 4) {
       targetSection = document.querySelector('[data-screen="notre-equipe"]');
     } else if (sectionIndex === 5) {
@@ -94,7 +94,7 @@ export default function HeadLine() {
       document.querySelector('[data-screen="home"]'),
       document.querySelector('[data-screen="products"]'),
       document.querySelector('[data-screen="subsidiarite"]'),
-      document.querySelector('[data-screen="temoignages"]'),
+      document.querySelector('[data-screen="reviews"]'),
       document.querySelector('[data-screen="notre-equipe"]'),
       document.querySelector('[data-screen="contact"]'),
       document.querySelector('[data-screen="footer"]'),
@@ -116,7 +116,7 @@ export default function HeadLine() {
               } else if (screenIndex === 2) {
                 newCurrent = 2; // "Subsidiarité"
               } else if (screenIndex === 3) {
-                newCurrent = 3; // "Témoignages"
+                newCurrent = 3; // "Reviews"
               } else if (screenIndex === 4) {
                 newCurrent = 4; // "Qui sommes-nous?"
               } else if (screenIndex === 5) {
