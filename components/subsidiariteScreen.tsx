@@ -176,7 +176,7 @@ export default function SubsidiariteScreen() {
              <div className="screen-content flex-col" style={{ paddingLeft: '0', paddingRight: '0' }}>
         <div className="flex flex-col sm:flex-row justify-center items-center sm:max-h-[40vh]" data-screen="subsidiarite-image">
           <Image 
-             src="/Application.jpg" 
+                                     src="/application.jpg" 
              alt="Subsidiarite" 
              width={400} 
              height={400} 
