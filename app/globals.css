@@ -131,9 +131,9 @@
   --sidebar-ring: oklch(0.708 0 0);
   --shadow-color: 0deg 0% 69%;
   
-  --color-sc-primary: #FBBF24;
+  --color-sc-primary: #ffffff;
   --color-sc-secondary: #012073;
-  --color-sc-tertiary: #000000;
+  --color-sc-tertiary: #0053ff; 
   --color-sc-quaternary: #ffffff;
   --shadow-elevation-low:
     0.5px 0.6px 0.9px hsl(var(--shadow-color) / 0.28),
