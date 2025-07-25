@@ -15,7 +15,7 @@ export default function Home() {
       <HomeScreen />
       <ProductsScreen />
       <ReviewsScreen />
-      <TeamScreen />
+      {/*<TeamScreen />*/}
       {/*
         <SubsidiariteScreen />
         <NotreEquipeScreen />
