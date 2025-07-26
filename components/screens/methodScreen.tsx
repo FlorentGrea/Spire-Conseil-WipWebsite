@@ -78,7 +78,7 @@ export default function MethodScreen() {
         style={{ backgroundColor: 'color-mix(in srgb, var(--color-sc-tertiary) 9%, transparent)' }}
         data-screen="method"
     >
-        <div className="relative screen-content flex flex-col gap-4">
+        <div className="relative flex flex-col justify-center items-center gap-2 w-[90vw] sm:max-w-[640px]">
             <div className="w-full flex flex-col sm:flex-row justify-center items-center sm:items-end">
                 <Image
                     src="/livre2.png"
@@ -96,11 +96,11 @@ export default function MethodScreen() {
                         Donner une forte capacité de décision & être en soutien de collaborateurs plus autonomes.<br />
                         Elle se déploie dans 6 dimensions :
                     </p>
-                                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 w-full justify-center items-center">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 w-full justify-center items-center">
                          {methodButtons.map((button) => (
                              <button
                                  key={button.id}
-                                 className={`button text-xs sm:text-sm lg:text-base px-2 py-1 font-bold transition-all duration-300 button-primary`}
+                                 className={`button text-xs px-2 py-1 font-bold transition-all duration-300 button-primary`}
                                  style={{
                                     color: 'var(--color-sc-secondary)',
                                     boxShadow: selectedButton === button.id ? 'none' : '0.20rem 0.20rem color-mix(in srgb, var(--color-sc-primary) 20%, transparent)',
@@ -123,7 +123,7 @@ export default function MethodScreen() {
                  </p>
              </div>
 
-            <div className="flex flex-col justify-center items-center gap-2 w-full">
+            <div className="flex flex-col justify-center items-center gap-2 w-full mt-6">
                 <h1 className="text-xl sm:text-4xl font-bold" style={{ color: 'var(--color-sc-secondary)' }}>
                     La subsidiarité en 10 critères
                 </h1>

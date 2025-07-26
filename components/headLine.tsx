@@ -19,7 +19,7 @@ export default function HeadLine() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const screenNames = ["Accueil", "Notre Parcours", "Notre Méthode", "Témoignages", "Les Fondateurs", "Nous Contacter", "Informations"];
+  const screenNames = ["Accueil", "Notre Parcours", "Notre Méthode", "Témoignages", "Les Fondateurs", "Nous Contacter"];
 
   // Handle scroll-based header visibility
   useEffect(() => {
@@ -58,15 +58,13 @@ export default function HeadLine() {
     } else if (sectionIndex === 1) {
       targetSection = document.querySelector('[data-screen="products"]');
     } else if (sectionIndex === 2) {
-      targetSection = document.querySelector('[data-screen="subsidiarite"]');
+      targetSection = document.querySelector('[data-screen="method"]');
     } else if (sectionIndex === 3) {
       targetSection = document.querySelector('[data-screen="reviews"]');
     } else if (sectionIndex === 4) {
       targetSection = document.querySelector('[data-screen="team"]');
     } else if (sectionIndex === 5) {
       targetSection = document.querySelector('[data-screen="contact"]');
-    } else if (sectionIndex === 6) {
-      targetSection = document.querySelector('[data-screen="footer"]');
     }
     
     if (targetSection) {
@@ -93,11 +91,10 @@ export default function HeadLine() {
     const screens = [
       document.querySelector('[data-screen="home"]'),
       document.querySelector('[data-screen="products"]'),
-      document.querySelector('[data-screen="subsidiarite"]'),
+      document.querySelector('[data-screen="method"]'),
       document.querySelector('[data-screen="reviews"]'),
       document.querySelector('[data-screen="team"]'),
       document.querySelector('[data-screen="contact"]'),
-      document.querySelector('[data-screen="footer"]'),
     ];
 
     const observer = new IntersectionObserver(
@@ -121,15 +118,13 @@ export default function HeadLine() {
               } else if (screenIndex === 1) {
                 newCurrent = 1; // "Nos Produits"
               } else if (screenIndex === 2) {
-                newCurrent = 2; // "Subsidiarité"
+                newCurrent = 2; // "Méthode"
               } else if (screenIndex === 3) {
                 newCurrent = 3; // "Reviews"
               } else if (screenIndex === 4) {
                 newCurrent = 4; // "Les fondateurs"
               } else if (screenIndex === 5) {
                 newCurrent = 5; // "Nous Contacter"
-              } else if (screenIndex === 6) {
-                newCurrent = 6; // "Informations" (footer)
               } else {
                 newCurrent = screenIndex;
               }
