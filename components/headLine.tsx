@@ -19,7 +19,7 @@ export default function HeadLine() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const screenNames = ["Accueil", "Notre parcours", "Notre Méthode", "Témoignages", "Qui sommes-nous?", "Nous Contacter", "Informations"];
+  const screenNames = ["Accueil", "Notre Parcours", "Notre Méthode", "Témoignages", "Les Fondateurs", "Nous Contacter", "Informations"];
 
   // Handle scroll-based header visibility
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function HeadLine() {
     } else if (sectionIndex === 3) {
       targetSection = document.querySelector('[data-screen="reviews"]');
     } else if (sectionIndex === 4) {
-      targetSection = document.querySelector('[data-screen="notre-equipe"]');
+      targetSection = document.querySelector('[data-screen="team"]');
     } else if (sectionIndex === 5) {
       targetSection = document.querySelector('[data-screen="contact"]');
     } else if (sectionIndex === 6) {
@@ -95,7 +95,7 @@ export default function HeadLine() {
       document.querySelector('[data-screen="products"]'),
       document.querySelector('[data-screen="subsidiarite"]'),
       document.querySelector('[data-screen="reviews"]'),
-      document.querySelector('[data-screen="notre-equipe"]'),
+      document.querySelector('[data-screen="team"]'),
       document.querySelector('[data-screen="contact"]'),
       document.querySelector('[data-screen="footer"]'),
     ];
@@ -105,6 +105,13 @@ export default function HeadLine() {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !isNavigating) {
             const screenIndex = screens.findIndex(screen => screen === entry.target);
+            
+            console.log('Intersection detected:', {
+              target: entry.target.getAttribute('data-screen'),
+              screenIndex,
+              current,
+              isNavigating
+            });
             
             if (screenIndex !== -1 && screenIndex !== current) {
               // Map screen indices to navigation indices
@@ -118,7 +125,7 @@ export default function HeadLine() {
               } else if (screenIndex === 3) {
                 newCurrent = 3; // "Reviews"
               } else if (screenIndex === 4) {
-                newCurrent = 4; // "Qui sommes-nous?"
+                newCurrent = 4; // "Les fondateurs"
               } else if (screenIndex === 5) {
                 newCurrent = 5; // "Nous Contacter"
               } else if (screenIndex === 6) {
@@ -128,6 +135,7 @@ export default function HeadLine() {
               }
               
               if (newCurrent !== current) {
+                console.log('Updating navigation:', { from: current, to: newCurrent });
                 setPrev(current);
                 setCurrent(newCurrent);
                 setDirection(newCurrent > current ? 'up' : 'down');
@@ -137,15 +145,18 @@ export default function HeadLine() {
         });
       },
       {
-        threshold: 0.6, // Trigger when 60% of the section is visible
-        rootMargin: '-20% 0px -20% 0px' // Adjust trigger area
+        threshold: 0.3, // Trigger when 30% of the section is visible
+        rootMargin: '-10% 0px -10% 0px' // Adjust trigger area
       }
     );
 
     // Observe all screens
-    screens.forEach((screen) => {
+    screens.forEach((screen, index) => {
       if (screen) {
         observer.observe(screen);
+        console.log(`Observing screen ${index}:`, screen.getAttribute('data-screen'));
+      } else {
+        console.log(`Screen ${index} not found`);
       }
     });
 

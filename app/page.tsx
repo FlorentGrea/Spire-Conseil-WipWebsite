@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
 import HomeScreen from "@/components/screens/homeScreen";
 import HeadLine from "@/components/headLine";
 import ProductsScreen from "@/components/screens/productsScreen";
 import ReviewsScreen from "@/components/screens/reviewsScreen";
 import TeamScreen from "@/components/screens/teamScreen";
+import ContactScreen from "@/components/screens/contactScreen";
+import Footer from "@/components/footer";
+import MethodScreen from "@/components/screens/methodScreen";
 
 export default function Home() {
 
@@ -14,13 +16,11 @@ export default function Home() {
       <HeadLine />
       <HomeScreen />
       <ProductsScreen />
+      {/*<MethodScreen />*/}
       <ReviewsScreen />
-      {/*<TeamScreen />*/}
-      {/*
-        <SubsidiariteScreen />
-        <NotreEquipeScreen />
+      <TeamScreen />
       <ContactScreen />
-      <FooterScreen /> */}
+      <Footer />
     </div>
   );
 }

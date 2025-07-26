@@ -97,7 +97,6 @@ export default function ProductsScreen() {
                         alt="Parcours"
                         fill
                         className="object-cover z-10"
-                        unoptimized
                     />
                     <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center z-30 p-2">
                         <h1 className="text-white text-center text-2xl"
@@ -151,7 +150,6 @@ export default function ProductsScreen() {
                         alt="Audit"
                         fill
                         className="object-cover z-10"
-                        unoptimized
                     />
                     <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center p-2 z-30">
                         <h1 
@@ -186,7 +184,6 @@ export default function ProductsScreen() {
                         alt="Coaching"
                         fill
                         className="object-cover z-10"
-                        unoptimized
                     />
                     <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center p-2 z-30">
                         <h1 className="text-white text-center text-2xl"
@@ -222,7 +219,6 @@ export default function ProductsScreen() {
                         alt="Application"
                         fill
                         className="object-cover z-10"
-                        unoptimized
                     />
                     <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center p-2 z-30">
                         <h1 className="text-white text-center text-2xl"
@@ -280,7 +276,7 @@ export default function ProductsScreen() {
                             alt="Parcours"
                             fill
                             className="absolute top-0 left-0 w-full h-full object-cover z-10"
-                            unoptimized
+
                         />  
                         {/* Close button */}
                         <button
