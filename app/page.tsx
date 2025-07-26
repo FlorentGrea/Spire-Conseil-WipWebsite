@@ -16,7 +16,7 @@ export default function Home() {
       <HeadLine />
       <HomeScreen />
       <ProductsScreen />
-      {/*<MethodScreen />*/}
+      <MethodScreen />
       <ReviewsScreen />
       <TeamScreen />
       <ContactScreen />
