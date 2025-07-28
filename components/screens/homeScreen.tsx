@@ -50,8 +50,8 @@ export default function HomeScreen() {
                     <h1 className="text-xl md:text-2xl lg:text-3xl text-center sm:text-left" style={{ color: 'var(--color-sc-primary)' }}>
                         Rafraîchissez vos pratiques managériales
                     </h1>
-                    <p className="text-xs md:text-sm lg:text-base text-justify leading-relaxed" style={{ color: 'var(--color-sc-quaternary)' }}>
-                        SPIRE accompagne les organisations dans la transformation de leurs pratiques managériales en valorisant l'autonomie, la     responsabilité et la prise de décision au juste niveau.<br /> Par la subsidiarité, nous faisons du management un levier de  performance pour l’entreprise, d’engagement et de bien-être durable pour l'ensemble des collaborateurs.                
+                    <p className="text-xs md:text-sm lg:text-base text-justify leading-relaxed" style={{ color: 'var(--color-sc-quaternary)' }}>  
+                        SPIRE accompagne les organisations dans la transformation de leurs pratiques managériales en valorisant l'autonomie, la responsabilité et la prise de décision au juste niveau.<br /> Par la subsidiarité, nous faisons du management un levier de la performance de votre entreprise, d’engagement et de bien-être durable pour l'ensemble de vos collaborateurs            
                     </p>
                     <div className="flex flex-row gap-2 sm:gap-4 justify-center sm:justify-start">
                       <button 
