@@ -10,6 +10,8 @@ interface HexagonProps extends SVGProps<SVGSVGElement> {
   children?: ReactNode;
   imageSrc?: string;
   imageAlt?: string;
+  imageClassName?: string;
+  imageStyle?: React.CSSProperties;
 }
 
 export default function Hexagon({ 
@@ -22,6 +24,8 @@ export default function Hexagon({
   children, 
   imageSrc,
   imageAlt,
+  imageClassName,
+  imageStyle,
   ...props 
 }: HexagonProps) {
   return (
@@ -43,12 +47,14 @@ export default function Hexagon({
             href={imageSrc}
             x="0"
             y="0"
-            width="16"
-            height="16"
-            preserveAspectRatio="xMidYMid slice"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
             clipPath="url(#hexagonClip)"
+            className={imageClassName}
             style={{
               imageRendering: 'auto',
+              ...imageStyle,
             }}
           />
         )}

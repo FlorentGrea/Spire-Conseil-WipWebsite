@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Hexagon from "../svgs/hexagone";
 
 export default function ReviewsScreen() {
@@ -149,6 +150,55 @@ export default function ReviewsScreen() {
     { col: 67, rows: [2, 4] },
   ];
 
+  const hexImages = [
+    'logoBatiss.jpg',
+    'logoBeychevelle.png',
+    'logoCaissedEpargne.png',
+    'logoDentMaster.png',
+    'logoDynaren.png',
+    'logoGlevents.jpg',
+    'logoKayentis.png',
+    'logoMieuxVivre.jpg',
+    'logoSpatiotempo.png',
+    'logoU.png'
+  ]
+
+  // Create a component for the grid content to avoid duplication
+  const GridContent = () => (
+    <>
+      {hexPositions.map(({ col, rows }, idx) =>
+        rows.map((row, i) => {
+          const imageIndex = (idx * 2 + i) % hexImages.length;
+          const imagePath = `/brands/${hexImages[imageIndex]}`;
+          
+          return (
+            <div
+              key={`${idx}-${i}`}
+              style={{
+                gridColumnStart: col,
+                gridColumnEnd: col + 4,
+                gridRowStart: row,
+                gridRowEnd: row + 2,
+                color: 'var(--color-sc-primary)',
+              }}
+              className="aspect-square rotate-90 p-1 relative"
+            >
+              <Hexagon 
+                className="size-32" 
+                imageSrc={imagePath}
+                imageAlt={`Brand ${imageIndex + 1}`}
+                imageStyle={{
+                  transform: 'scale(1) translate(0%, 0%)',
+                  transformOrigin: 'center',
+                }}
+              />
+            </div>
+          );
+        })
+      )}
+    </>
+  );
+
   return (
     <div 
         className="screen-container" 
@@ -157,28 +207,33 @@ export default function ReviewsScreen() {
     >
         <div className="screen-content relative">
 
-            {/* Grid Section */}
-            <div className="absolute top-0 grid grid-cols-72 grid-rows-6 gap-12 w-[200%] left-1/2 -translate-x-1/2 h-fit z-10">
-                {hexPositions.map(({ col, rows }, idx) =>
-                    rows.map((row, i) => (
-                        <div
-                            key={`${idx}-${i}`}
-                            style={{
-                                gridColumnStart: col,
-                                gridColumnEnd: col + 4,
-                                gridRowStart: row,
-                                gridRowEnd: row + 2,
-                                color: 'var(--color-sc-primary)',
-                            }}
-                            className="aspect-square rotate-90 p-1"
-                        >
-                            <Hexagon
-                                className="size-32"
-                            />
-                        </div>
-                    ))
-                )}
+            {/* Infinite Scrolling Grid Section */}
+            <div className="absolute top-0 w-full h-fit z-10 -translate-x-full">
+              <div 
+                className="grid grid-cols-72 grid-rows-6 gap-12"
+                style={{
+                  width: '400%',
+                  animation: 'scroll 30s linear infinite',
+                }}
+              >
+                {/* First set of hexagons */}
+                <GridContent />
+                {/* Second set of hexagons (duplicate for seamless loop) */}
+                <GridContent />
+              </div>
             </div>
+
+            {/* Add CSS animation for infinite scroll */}
+            <style jsx>{`
+              @keyframes scroll {
+                0% {
+                  transform: translateX(0);
+                }
+                100% {
+                  transform: translateX(-50%);
+                }
+              }
+            `}</style>
             
             {/* Video Section */}
             <div className="absolute top-1/2 -translate-y-full right-0 aspect-video w-[90%] sm:w-[60%] md:w-[70%] z-30 overflow-hidden" style={{ boxShadow: `0.20rem 0.20rem color-mix(in srgb, var(--color-sc-secondary) 80%, transparent)` }}>
