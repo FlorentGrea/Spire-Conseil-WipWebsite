@@ -20,7 +20,7 @@ const teamMembers: TeamMember[] = [
       {
         title: "Marc Fassier",
         image: "/marc.jpg",
-        description: "Enseignant-chercheur, il est spécialiste de l'éthique des affaires et de la sociologie des organisations et fondateur de la chaire ICP-ESSEC Entreprises et bien commun. Il accompagne les grands dirigeants dans la nouvelle étape de leur responsabilité sociale et environnementale."
+        description: "Enseignant-chercheur, il est spécialiste de l'éthique des affaires et de la sociologie des organisations et fondateur de la chaire ICP-ESSEC Entreprises et bien commun. Il accompagne les dirigeants dans la nouvelle étape de leur responsabilité sociale et environnementale."
       }
     ]
 

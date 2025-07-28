@@ -63,7 +63,7 @@ export default function HomeScreen() {
                           }
                         }}
                       >
-                        <h1>Notre parcours</h1>
+                        <h1>Nos offres</h1>
                       </button>
                       <button
                         className="button button-primary text-lg lg:text-xl px-4 lg:px-6 py-2"

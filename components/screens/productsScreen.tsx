@@ -33,7 +33,7 @@ const products = [
     {
         keyWord: "Mesurer",
         image: "/mesurer.jpg",
-        title: "Mesure du ROI des formations des managers OLI",
+        title: "Maîtriser les bénéfices financiers et extra-financiers de vos pratiques managériales",
         description: "Nous accompagnons les managers dans le temps par un mentor digital dédié à chaque manager et lui permettant au quotidien de trouver des conseils innovants grâce à l'IA, d'avoir des ressources à portée de main et de mettre en oeuvre des plans d'action pour leur progression, celle de leur équipe et de leurs collaborateurs.<br />Chaque manager est rendu capable de mesurer les bénéfices de nouvelles pratiques managériales.<br />SPIRE est capable de vous fournir dans le temps une mesure de la compression des coûts cachés du management et des gains financiers et extra-financiers obtenus.",
         useCase: "Dans une entreprise du secteur agricole, l'ensemble des managers a été formé aux principes du management par la subsidiarité.<br />En parallèle, chaque manager a utilisé OLI pour construire des plans d'actions.<br />Les managers ont pu évaluer régulièrement la mesure de progression des pratiques managériales au sein de leur équipe.<br />Les bénéfices constaté ont pu nous permettre d'établir une mesure du ROI objectivée de la formation pour l'entreprise.",
         method: ["Formation des managers à la subsidiarité", "Déploiement de l'application mentor OLI", "Construction guidée par l'IA de plans d'actions", "Mesure continue des bénéfices des pratiques managériales au niveau de chaque manager", "Restitution et valorisation des bénéfices financiers et extra-financiers à partir de 6 familles de dysfonctionnements à 3 mois / 6 mois / 1 an"],
@@ -75,7 +75,7 @@ export default function ProductsScreen() {
             <div className="relative px-4 lg:px-6 py-2 z-10" style={{ backgroundColor: 'var(--color-sc-secondary)'}}>
                 <div className="absolute top-0 left-0 w-full h-30 z-10" style={{ backgroundColor: 'var(--color-sc-secondary)'}} />
                 <h1 className="relative title-text text-center z-20" style={{ color: 'var(--color-sc-primary)'}}>
-                    Un parcours complet en <br className="block sm:hidden" />trois étapes
+                    Nos quatres offres
                 </h1>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 grid-rows-4 w-full gap-2 sm:gap-4 max-h-[600px] z-20 auto-rows-min">
