@@ -12,7 +12,7 @@ export default function HomeScreen() {
         data-screen="home"  
     >
         <Image 
-            src="/bg3.jpg"
+            src="/bg1.jpg"
             alt="background home image"
             width='1920'
             height='1080'

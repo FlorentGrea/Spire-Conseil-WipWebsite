@@ -89,8 +89,12 @@ export default function TeamScreen() {
                         <Hexagon 
                             className="size-full" 
                             style={{ color: 'var(--color-sc-secondary)'}}
-                            imageSrc="/david.webp"
+                            imageSrc="/david.jpg"
                             imageAlt="David Gréa"
+                            imageClassName='object-cover'
+                            preserveAspectRatio='slice'
+                            imageHeight="100%"
+                            imageWidth="100%"
                         />
                         <div 
                             className="absolute bottom-0 -right-2 px-3 sm:px-4 lg:px-6 py-1 text-center" 
@@ -129,6 +133,11 @@ export default function TeamScreen() {
                             style={{ color: 'var(--color-sc-secondary)'}}
                             imageSrc="/marc.jpg"
                             imageAlt="Marc Fassier"
+                            imageClassName='object-cover'
+                            preserveAspectRatio='slice'
+                            imageY="0"
+                            imageHeight="100%"
+                            imageStyle={{ objectPosition: '10% 80%' }}
                         />
                         <div 
                             className="absolute bottom-0 -left-2 px-3 sm:px-4 lg:px-6 py-1 text-center" 

@@ -191,6 +191,7 @@ export default function ReviewsScreen() {
                   transform: 'scale(1) translate(0%, 0%)',
                   transformOrigin: 'center',
                 }}
+                preserveAspectRatio='meet'
               />
             </div>
           );
