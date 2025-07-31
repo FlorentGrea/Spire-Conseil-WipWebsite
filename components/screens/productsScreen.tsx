@@ -215,10 +215,16 @@ export default function ProductsScreen() {
                         }}
                     />
                     <Image
-                        src="/mesurer.jpg"
+                        src="/oliLandscape.png"
                         alt="Application"
                         fill
-                        className="object-cover z-10"
+                        className="object-cover z-10 sm:hidden"
+                    />
+                    <Image
+                        src="/oliPortrait.png"
+                        alt="Application"
+                        fill
+                        className="object-cover z-10 hidden sm:block"
                     />
                     <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center p-2 z-30">
                         <h1 className="text-white text-center text-2xl"
@@ -272,12 +278,12 @@ export default function ProductsScreen() {
                             src={selectedButton === "Parcours" ? "/parcours.jpg" : 
                                  selectedButton === "Viser" ? "/audit.jpg" : 
                                  selectedButton === "Ancrer" ? "/coaching.jpg" : 
-                                 selectedButton === "Mesurer" ? "/mesurer.jpg" : "/parcours.jpg"}
+                                 selectedButton === "Mesurer" ? "/oliLandscape.png" : "/parcours.jpg"}
                             alt="Parcours"
                             fill
                             className="absolute top-0 left-0 w-full h-full object-cover z-10"
 
-                        />  
+                        />
                         {/* Close button */}
                         <button
                             className="button button-secondary absolute top-4 right-4 text-gray-500 rounded-sm z-30"
@@ -296,7 +302,7 @@ export default function ProductsScreen() {
                             </svg>
                         </button>
                         <div className="absolute bottom-0 left-0 w-full p-2 z-30">
-                            <h1 className="text-center text-2xl" style={{ color: 'var(--color-sc-primary)' }}>
+                            <h1 className="text-center text-xl" style={{ color: 'var(--color-sc-primary)' }}>
                                 {products.find(item => item.keyWord === selectedButton)?.title}
                             </h1>
                         </div>
