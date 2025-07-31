@@ -140,7 +140,7 @@ export default function TeamScreen() {
                             imageStyle={{ objectPosition: '10% 80%' }}
                         />
                         <div 
-                            className="absolute bottom-0 -left-2 px-3 sm:px-4 lg:px-6 py-1 text-center" 
+                            className="absolute bottom-0 -left-2 px-3 sm:px-4 lg:px-6 py-0.5 text-center" 
                             style={{ backgroundColor: 'var(--color-sc-secondary)'}}
                         >
                             <h1 className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold" style={{ color: 'var(--color-sc-primary)'}}>
